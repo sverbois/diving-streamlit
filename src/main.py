@@ -63,6 +63,7 @@ streamlit_style = """
     /*h1 {color:blue !important;}*/
     div.stMainBlockContainer {padding-top: 0rem !important;}
     header {display: none !important;}
+    hr {margin: 1rem 0 !important;}
     a[href*="streamlit.io"] {display: none !important;}
     iframe + a {display: none !important;}
     iframe + a + div {display: none !important;}
