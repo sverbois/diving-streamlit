@@ -60,8 +60,9 @@ st.markdown(f"<h5 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h
 ### Remove Streamlit header and footer
 hide_streamlit_header_footer = """
     <style>
-    /*header {display: none !important;}*/
-    a {display: none !important;}
+    h1 {color:blue;}
+    iframe + a {display: none !important;}
+    iframe + a + div {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_header_footer, unsafe_allow_html=True)
