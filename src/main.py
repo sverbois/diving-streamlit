@@ -29,7 +29,7 @@ start_pressure = left.number_input(
     min_value=50,
     max_value=300,
 )
-end_pressure = right.number_input(
+end_pressure = left.number_input(
     label="Pression fin plongée (en bars)",
     value=50,
     step=10,
@@ -37,7 +37,7 @@ end_pressure = right.number_input(
     min_value=10,
     max_value=start_pressure - 10,
 )
-dive_time = left.number_input(
+dive_time = right.number_input(
     label="Durée plongée (en minutes)",
     value=45,
     step=1,
