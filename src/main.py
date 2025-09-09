@@ -58,13 +58,14 @@ rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean
 st.markdown(f"<h5 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h5>", unsafe_allow_html=True)
 
 ### Remove Streamlit header and footer
-hide_streamlit_header_footer = """
+streamlit_style = """
     <style>
     /*h1 {color:blue !important;}*/
+    stMainBlockContainer {padding-top: 0rem !important;}
     header {display: none !important;}
     a[href*="streamlit.io"] {display: none !important;}
     iframe + a {display: none !important;}
     iframe + a + div {display: none !important;}
     </style>
 """
-st.markdown(hide_streamlit_header_footer, unsafe_allow_html=True)
+st.markdown(streamlit_style, unsafe_allow_html=True)
