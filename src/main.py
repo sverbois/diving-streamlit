@@ -61,7 +61,7 @@ st.markdown(f"<h5 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h
 streamlit_style = """
     <style>
     /*h1 {color:blue !important;}*/
-    stMainBlockContainer {padding-top: 0rem !important;}
+    div.stMainBlockContainer {padding-top: 0rem !important;}
     header {display: none !important;}
     a[href*="streamlit.io"] {display: none !important;}
     iframe + a {display: none !important;}
