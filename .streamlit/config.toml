@@ -1,5 +1,9 @@
 [global]
 
+[logger]
+
 [client]
+showErrorDetails = "none"
+toolbarMode = "minimal"
 
 [theme]

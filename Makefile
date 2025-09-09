@@ -9,3 +9,7 @@ run:
 .PHONY: clean  # Clean development environment
 clean:
 	rm -rf .venv
+
+.PHONY: config  # Show streamlit config
+config:
+	uv run streamlit config show
