@@ -62,7 +62,7 @@ hide_streamlit_header_footer = """
     <style>
     h1 {color:red !important;}
     header {display: none !important;}
-    a[href*="streamlit.io"] {display: none !important;}
+    a {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_header_footer, unsafe_allow_html=True)
