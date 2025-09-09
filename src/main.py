@@ -9,9 +9,10 @@ def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_d
 
 
 st.title("Calcul du RMV")
-st.markdown(
-    "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. Il est exprimé en litres par minute (L/min)."
-)
+with st.expander("Définition"):
+    st.markdown(
+        "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. Il est exprimé en litres par minute (L/min)."
+    )
 st.divider()
 cylinder_volume = st.radio(
     label="Volume bouteille (en litres)",
