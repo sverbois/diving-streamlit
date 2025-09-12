@@ -1,73 +1,33 @@
 import streamlit as st
 
+# Voir la liste des icon possibles ici : https://fonts.google.com/icons?icon.set=Material+Icons
 
-def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth):
-    if not (cylinder_volume and start_pressure and end_pressure and dive_time and mean_depth):
-        return 0.0
-    pressure = mean_depth / 10.0 + 1.0
-    return (cylinder_volume * (start_pressure - end_pressure)) / (dive_time * pressure)
-
-
-st.title("Calcul du RMV")
-with st.expander("Définition"):
-    st.markdown(
-        "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. Il est exprimé en litres par minute (L/min)."
-    )
-st.divider()
-cylinder_volume = st.radio(
-    label="Volume bouteille (en litres)",
-    options=(10, 12, 15, 16, 20, 24),
-    index=2,
-    horizontal=True,
-    format_func=lambda x: f"{x} L",
+home_page = st.Page(
+    "pages/home.py",
+    title="Accueil",
+    icon=":material/home:",
 )
-left, right = st.columns(2, vertical_alignment="bottom")
-start_pressure = left.number_input(
-    label="Pression début plongée (en bars)",
-    value=200,
-    step=10,
-    format="%d",
-    min_value=50,
-    max_value=300,
+rmv_page = st.Page(
+    "pages/rmv.py",
+    title="RMV",
+    icon=":material/air:",
 )
-end_pressure = left.number_input(
-    label="Pression fin plongée (en bars)",
-    value=50,
-    step=10,
-    format="%d",
-    min_value=10,
-    max_value=start_pressure - 10,
+nitrox_page = st.Page(
+    "pages/nitrox.py",
+    title="Nitrox",
+    icon=":material/bubble_chart:",
 )
-dive_time = right.number_input(
-    label="Durée plongée (en minutes)",
-    value=45,
-    step=1,
-    format="%d",
-    min_value=10,
-    max_value=120,
+gas_page = st.Page(
+    "pages/gas.py",
+    title="Gaz",
+    icon=":material/scuba_diving:",
 )
-mean_depth = right.number_input(
-    label="Profondeur moyenne (en mètres)",
-    value=15.0,
-    step=0.5,
-    format="%0.1f",
-    min_value=10.0,
-    max_value=30.0,
+pg = st.navigation(
+    [
+        home_page,
+        rmv_page,
+        nitrox_page,
+        gas_page,
+    ]
 )
-st.divider()
-rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth)
-st.markdown(f"<h5 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h5>", unsafe_allow_html=True)
-
-### Remove Streamlit header and footer
-streamlit_style = """
-    <style>
-    /*h1 {color:blue !important;}*/
-    div.stMainBlockContainer {padding-top: 0rem !important;}
-    header {display: none !important;}
-    hr {margin: 0px !important;}
-    a[href*="streamlit.io"] {display: none !important;}
-    iframe + a {display: none !important;}
-    iframe + a + div {display: none !important;}
-    </style>
-"""
-st.markdown(streamlit_style, unsafe_allow_html=True)
+pg.run()
