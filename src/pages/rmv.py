@@ -56,7 +56,7 @@ mean_depth = right.number_input(
 )
 st.divider()
 rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth)
-st.markdown(f"<h5 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h5>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h3>", unsafe_allow_html=True)
 
 ### Remove Streamlit header and footer
 streamlit_style = """
