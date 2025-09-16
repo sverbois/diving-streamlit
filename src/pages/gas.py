@@ -1,4 +1,161 @@
+import pandas as pd
 import streamlit as st
 
-st.title("Gas")
-st.write("TODO")
+ASCENT_SPEED = 10  # m/min
+DESCENT_SPEED = 20  # m/min
+DECO_DEPTH = 6  # m
+SAFETY_STOP_DURATION = 5  # min
+COLUMN_CONFIG = {
+    "icon": st.column_config.TextColumn(
+        "",
+        width=30,
+    ),
+    "depth": st.column_config.NumberColumn(
+        "Profondeur (m)",
+        min_value=10,
+        max_value=68,
+        step=1,
+        format="%d m",
+        required=True,
+    ),
+    # Colonne d'affichage (texte) pour masquer la profondeur pendant les phases de montée/descente
+    "depth_display": st.column_config.TextColumn(
+        "Profondeur (m)",
+    ),
+    "duration": st.column_config.NumberColumn(
+        "Durée (min)",
+        min_value=1,
+        max_value=90,
+        step=1,
+        format="%d min",
+        required=True,
+    ),
+    "consumption": st.column_config.NumberColumn(
+        "Consommation (L)",
+        format="%d L",
+    ),
+    "runtime": st.column_config.NumberColumn(
+        "Temps cumulé (min)",
+        format="%d min",
+    ),
+    "pressure": st.column_config.NumberColumn(
+        "Pression (bar)",
+        format="%d bar",
+    ),
+}
+ICONS = {
+    "start": "🚀",
+    "constant": "🤿",
+    "ascent": "⬆️",
+    "descent": "⬇️",
+    "deco": "🫧",
+}
+
+
+st.title("Gaz")
+with st.expander("Description"):
+    st.markdown(
+        "Ce formulaire calcule la consommation de gaz lors d'une plongée multi-niveaux. "
+        "On considère que les paliers sont effectués à une profondeur moyenne de 6 m avec un palier de sécurité de 5 minutes."
+    )
+with st.container(border=True):
+    col1, col2 = st.columns(2)
+    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=20, step=1)
+    cylinder_volume = col1.selectbox(
+        label="Volume bouteille (L)",
+        options=(10, 12, 15, 16, 20, 24),
+        index=2,
+        format_func=lambda x: f"{x} L",
+    )
+    cylinder_pressure = col1.slider("Pression bouteille (bar)", min_value=50, max_value=300, value=200, step=10)
+    col2.text("Paramètres plongée")
+    data_default = pd.DataFrame([{"depth": 40, "duration": 5}, {"depth": 20, "duration": 10}])
+    data = col2.data_editor(
+        data_default, num_rows="dynamic", column_order=["depth", "duration"], column_config=COLUMN_CONFIG
+    )
+    decompression_time = col2.slider("Temps paliers (min)", min_value=0, max_value=20, value=0, step=1)
+
+
+def add_ascent_and_descent_data(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.reset_index(drop=True)  # Reset index to ensure proper iteration
+    df.loc[len(df)] = {"depth": DECO_DEPTH, "duration": SAFETY_STOP_DURATION + decompression_time}
+    first = pd.DataFrame([{"depth": 0, "duration": 0}])
+    df = pd.concat([first, df], ignore_index=True)
+    rows: list[dict] = []
+    for i in range(len(df)):
+        level = df.iloc[i]
+        # Ajoute le niveau
+        rows.append(
+            {
+                "depth": level["depth"],
+                "duration": level["duration"],
+                "type": "constant" if i < len(df) - 1 else "deco",
+            }
+        )
+        # Insère la descente / remontée
+        if i < len(df) - 1:
+            next_depth = df.iloc[i + 1]["depth"]
+            avg_depth = (level["depth"] + next_depth) / 2
+            diff_depth = next_depth - level["depth"]
+            rows.append(
+                {
+                    "depth": avg_depth,
+                    "duration": diff_depth / DESCENT_SPEED if diff_depth > 0 else abs(diff_depth) / ASCENT_SPEED,
+                    "type": "descent" if diff_depth > 0 else "ascent",
+                }
+            )
+            rows[0]["type"] = "start"
+    return pd.DataFrame(rows)
+
+
+# Nouveau DataFrame avec profondeurs de descente/remontée
+fulldata = add_ascent_and_descent_data(
+    data,
+)
+
+
+pressures = 1 + fulldata["depth"] / 10
+fulldata["consumption"] = pressures * rmv * fulldata["duration"]
+fulldata["icon"] = fulldata["type"].map(ICONS)
+fulldata["runtime"] = fulldata["duration"].cumsum()
+fulldata["pressure"] = cylinder_pressure - (fulldata["consumption"].cumsum() / cylinder_volume)
+
+# Masque la profondeur pour les segments de montée / descente dans l'affichage final
+fulldata["depth_display"] = fulldata.apply(
+    lambda r: "⬆️" if r["type"] == "ascent" else "⬇️" if r["type"] == "descent" else f"{int(r['depth'])} m",
+    axis=1,
+)
+
+st.dataframe(
+    fulldata,
+    hide_index=True,
+    column_order=["depth_display", "duration", "consumption", "runtime", "pressure"],
+    column_config=COLUMN_CONFIG,
+)
+
+total_consumption_in_l = int(fulldata["consumption"].sum())
+total_consumption_in_bar = total_consumption_in_l / cylinder_volume
+reserve_in_bar = int(cylinder_pressure - total_consumption_in_bar)
+total_time_in_min = int(fulldata["duration"].sum())
+
+if reserve_in_bar < 50:
+    st.markdown(
+        "<div class='center danger'><h3>DANGER</h3><h5>Votre réserve est insuffisante !</h5></div>",
+        unsafe_allow_html=True,
+    )
+with st.container(horizontal=True):
+    st.metric(
+        label="Temps total (min)",
+        value=f"{total_time_in_min} min",
+        border=True,
+    )
+    st.metric(
+        label="Consommation (L)",
+        value=f"{total_consumption_in_l} L",
+        border=True,
+    )
+    st.metric(
+        label="Réserve (bar)",
+        value=f"{reserve_in_bar} bar",
+        border=True,
+    )
