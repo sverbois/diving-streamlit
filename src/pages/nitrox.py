@@ -27,7 +27,7 @@ def equivalent_air_depth(o2_percentage, nitrox_depth):
 
 
 st.title("Nitrox")
-with st.expander("Définition"):
+with st.expander("Description"):
     st.markdown(
         "Le **Nitrox** est un mélange enrichi en oxygène. Il contient juste qu'à 40% d'oxygène pour un gaz de fond et jusqu'à 100% pour un gaz de déco."
     )
@@ -94,15 +94,3 @@ with st.container(border=True):
         key="depth",
     )
     st.markdown(f"<h2 class='center'>{equivalent_air_depth(o2percentage, depth)} m</h2>", unsafe_allow_html=True)
-
-streamlit_style = """
-    <style>
-        .center {
-            text-align: center;
-        }
-        .mt-0 {
-            margin-top: 0px;
-        }
-    </style>
-"""
-st.markdown(streamlit_style, unsafe_allow_html=True)

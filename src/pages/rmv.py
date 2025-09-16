@@ -8,10 +8,12 @@ def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_d
     return (cylinder_volume * (start_pressure - end_pressure)) / (dive_time * pressure)
 
 
-st.title("Calcul du RMV")
-with st.expander("Définition"):
+st.title("RMV")
+with st.expander("Description"):
     st.markdown(
-        "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. Il est exprimé en litres par minute (L/min)."
+        "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. "
+        "Il est exprimé en litres par minute (L/min). "
+        "Connaître son RMV permet de mieux planifier ses plongées et de gérer sa consommation de gaz."
     )
 
 cylinder_volume = st.radio(
@@ -56,18 +58,4 @@ mean_depth = right.number_input(
 )
 st.divider()
 rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth)
-st.markdown(f"<h3 style='text-align:center;'>Votre RMV est de {rmv:.1f} L/min</h3>", unsafe_allow_html=True)
-
-### Remove Streamlit header and footer
-streamlit_style = """
-    <style>
-    h1 {font-size: 2.5rem;}
-    div.stMainBlockContainer {padding-top: 2rem !important;}
-    /*header {display: none !important;}*/
-    hr {margin: 0px !important;}
-    a[href*="streamlit.io"] {display: none !important;}
-    iframe + a {display: none !important;}
-    iframe + a + div {display: none !important;}
-    </style>
-"""
-st.markdown(streamlit_style, unsafe_allow_html=True)
+st.markdown(f"<h3 class='center'>Votre RMV est de {rmv:.1f} L/min</h3>", unsafe_allow_html=True)
