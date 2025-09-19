@@ -4,6 +4,16 @@
 
 [client]
 showErrorDetails = "none"
-toolbarMode = "minimal"
+toolbarMode = "auto"
 
 [theme]
+# primaryColor = "forestGreen"
+# textColor = "red"
+# linkColor="darkOrchid"
+# backgroundColor = "pink"
+# secondaryBackgroundColor = "orange"
+
+[theme.sidebar]
+# backgroundColor = "lightGray"
+# textColor = "black"
+# linkColor = "blue"

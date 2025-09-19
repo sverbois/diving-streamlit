@@ -1,6 +1,12 @@
 import pandas as pd
 import streamlit as st
 
+from utils import initialize_session
+
+initialize_session()
+user_data = st.session_state["user_data"]
+
+
 ASCENT_SPEED = 10  # m/min
 DESCENT_SPEED = 20  # m/min
 DECO_DEPTH = 6  # m
@@ -52,7 +58,7 @@ ICONS = {
 }
 
 
-st.title("Gaz")
+st.title("Gas planning")
 with st.expander("Description"):
     st.markdown(
         "Ce formulaire calcule la consommation de gaz lors d'une plongée multi-niveaux. "
@@ -60,7 +66,7 @@ with st.expander("Description"):
     )
 with st.container(border=True):
     col1, col2 = st.columns(2)
-    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=20, step=1)
+    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=user_data.rmv, step=1)
     cylinder_volume = col1.selectbox(
         label="Volume bouteille (L)",
         options=(10, 12, 15, 16, 20, 24),
