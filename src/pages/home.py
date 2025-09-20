@@ -2,7 +2,7 @@ import streamlit as st
 
 st.title("Plan and Dive")
 st.write(
-    "Quelques petits formulaires pour vous aider à planifier vos plongées. "
+    "Quelques petits outils pour vous aider à planifier vos plongées. "
     "Utilisez la navigation sur le côté gauche pour accéder aux différents formulaires."
 )
 st.markdown(
