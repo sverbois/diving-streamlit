@@ -98,44 +98,50 @@ st.subheader("Gaz à ajouter")
 g1, g2 = st.columns(2, border=True)
 with g1:
     st.markdown("#### O2 → He → Air")
-    st.metric(
-        "O2",
-        f"{ps['start']:.0f} bar → {ps['start'] + ps['o2']:.0f} bar",
-        delta=f"+ {int(missing['o2'])} L",
-        border=True,
-    )
-    st.metric(
-        "He",
-        f"{ps['start'] + ps['o2']:.0f} bar → {ps['start'] + ps['o2'] + ps['he']:.0f} bar",
-        delta=f"+ {int(missing['he'])} L",
-        border=True,
-    )
-    st.metric(
-        "Air",
-        f"{ps['start'] + ps['o2'] + ps['he']:.0f} bar → {ps['start'] + ps['o2'] + ps['he'] + ps['air']:.0f} bar",
-        delta=f"+ {int(missing['air'])} L",
-        border=True,
-    )
+    if ps["o2"] > 0:
+        st.metric(
+            "O2",
+            f"{ps['start']:.0f} bar → {ps['start'] + ps['o2']:.0f} bar",
+            delta=f"+ {int(missing['o2'])} L",
+            border=True,
+        )
+    if ps["he"] > 0:
+        st.metric(
+            "He",
+            f"{ps['start'] + ps['o2']:.0f} bar → {ps['start'] + ps['o2'] + ps['he']:.0f} bar",
+            delta=f"+ {int(missing['he'])} L",
+            border=True,
+        )
+    if ps["air"] > 0:
+        st.metric(
+            "Air",
+            f"{ps['start'] + ps['o2'] + ps['he']:.0f} bar → {ps['start'] + ps['o2'] + ps['he'] + ps['air']:.0f} bar",
+            delta=f"+ {int(missing['air'])} L",
+            border=True,
+        )
 with g2:
     st.markdown("#### He → O2 → Air")
-    st.metric(
-        "He",
-        f"{ps['start']:.0f} bar → {ps['start'] + ps['he']:.0f} bar",
-        delta=f"+ {int(missing['he'])} L",
-        border=True,
-    )
-    st.metric(
-        "O2",
-        f"{ps['start'] + ps['he']:.0f} bar → {ps['start'] + ps['he'] + ps['o2']:.0f} bar",
-        delta=f"+ {int(missing['o2'])} L",
-        border=True,
-    )
-    st.metric(
-        "Air",
-        f"{ps['start'] + ps['he'] + ps['o2']:.0f} bar → {ps['start'] + ps['he'] + ps['o2'] + ps['air']:.0f} bar",
-        delta=f"+ {int(missing['air'])} L",
-        border=True,
-    )
+    if ps["he"] > 0:
+        st.metric(
+            "He",
+            f"{ps['start']:.0f} bar → {ps['start'] + ps['he']:.0f} bar",
+            delta=f"+ {int(missing['he'])} L",
+            border=True,
+        )
+    if ps["o2"] > 0:
+        st.metric(
+            "O2",
+            f"{ps['start'] + ps['he']:.0f} bar → {ps['start'] + ps['he'] + ps['o2']:.0f} bar",
+            delta=f"+ {int(missing['o2'])} L",
+            border=True,
+        )
+    if ps["air"] > 0:
+        st.metric(
+            "Air",
+            f"{ps['start'] + ps['he'] + ps['o2']:.0f} bar → {ps['start'] + ps['he'] + ps['o2'] + ps['air']:.0f} bar",
+            delta=f"+ {int(missing['air'])} L",
+            border=True,
+        )
 
 st.subheader("Coût du mélange")
 st.write("TODO")
