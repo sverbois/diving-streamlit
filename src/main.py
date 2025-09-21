@@ -44,9 +44,9 @@ gas_blender_page = st.Page(
     title="Gas blender",
     icon=":material/auto_fix_high:",
 )
-profile_page = st.Page(
-    "pages/profile.py",
-    title="Profile",
+preferences_page = st.Page(
+    "pages/preferences.py",
+    title="Preferences",
     icon=":material/person:",
 )
 statistics_page = st.Page(
@@ -56,7 +56,7 @@ statistics_page = st.Page(
 )
 pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
 if st.user.is_logged_in:
-    pages.append(profile_page)
+    pages.append(preferences_page)
     if st.user.email == "sebastien.verbois@gmail.com":
         pages.append(statistics_page)
 
@@ -68,15 +68,15 @@ with st.sidebar:
     else:
         action = st.selectbox(
             label=f"**{st.user.name}**",
-            options=("Profile", "Logout"),
+            options=("Preferences", "Logout"),
             index=None,
             placeholder="Actions…",
             key="user_actions",
         )
         if action == "Logout":
             st.logout()
-        elif action == "Profile":
-            st.switch_page(profile_page)
+        elif action == "Preferences":
+            st.switch_page(preferences_page)
             st.rerun()
 
 pg.run()
