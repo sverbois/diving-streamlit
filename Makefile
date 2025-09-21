@@ -2,8 +2,8 @@
 help:
 	@cat "Makefile" | grep '^.PHONY:' | sed -e "s/^.PHONY:/- make/"
 
-.PHONY: run  # Run component
-run:
+.PHONY: start  # Start component
+start:
 	uv run streamlit run src/main.py
 
 .PHONY: clean  # Clean development environment
