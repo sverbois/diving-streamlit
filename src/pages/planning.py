@@ -10,8 +10,6 @@ from utils import get_user_data
 
 USER_DATA = get_user_data()
 
-ASCENT_SPEED = 10  # m/min
-DESCENT_SPEED = 20  # m/min
 DECO_DEPTH = 6  # m
 SAFETY_STOP_DURATION = 5  # min
 COLUMN_CONFIG = {
@@ -73,7 +71,20 @@ with st.expander("Description"):
     )
 with st.container(border=True):
     col1, col2 = st.columns(2)
-    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=USER_DATA.rmv, step=1)
+    rmv = col1.slider(
+        "RMV (L/min)",
+        min_value=8,
+        max_value=25,
+        value=USER_DATA.rmv,
+        step=1,
+    )
+    descent_speed = col1.slider(
+        "Descent speed (m/min)",
+        min_value=10,
+        max_value=30,
+        value=USER_DATA.descent_speed,
+        step=2,
+    )
     cylinder_volume = col1.selectbox(
         label="Cylinder volume (L)",
         options=CYLINDER_VOLUMES,
@@ -87,6 +98,9 @@ with st.container(border=True):
         data_default, num_rows="dynamic", column_order=["depth", "duration"], column_config=COLUMN_CONFIG
     )
     decompression_time = col2.slider("Decompression time (min)", min_value=0, max_value=20, value=0, step=1)
+
+ASCENT_SPEED = 10  # m/min
+DESCENT_SPEED = descent_speed  # m/min
 
 
 def add_ascent_and_descent_data(df: pd.DataFrame) -> pd.DataFrame:

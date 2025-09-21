@@ -21,7 +21,8 @@ class UserDataModel(BaseModel):
     #     description="Courriel",
     #     readOnly=True,
     # )
-    rmv: int = Field(default=20, title="RMV en L/min")
+    rmv: int = Field(default=20, title="RMV in L/min")
+    descent_speed: int = Field(default=20, title="Descent speed in m/min")
 
 
 def get_user_data():
