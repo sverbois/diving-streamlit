@@ -21,36 +21,41 @@ class UserDataModel(BaseModel):
     rmv: int = Field(default=20, title="RMV en L/min")
 
 
-def initialize_session():
+def get_user_data():
     if "user_data" not in st.session_state:
-        if st.user.is_logged_in:
-            conn = st.connection("sqlite", type="sql")
-            with conn.session as s:
-                s.execute(
-                    text(
-                        """
+        initialize_session()
+    return st.session_state["user_data"]
+
+
+def initialize_session():
+    if st.user.is_logged_in:
+        conn = st.connection("sqlite", type="sql")
+        with conn.session as s:
+            s.execute(
+                text(
+                    """
                     CREATE TABLE IF NOT EXISTS users (
                         email TEXT PRIMARY KEY,
                         data  JSON CHECK (json_valid(data))
                     );
                     """
-                    )
                 )
-                s.commit()
+            )
+            s.commit()
 
-            with conn.session as s:
-                sqlite_current_user = s.execute(
-                    text("SELECT data FROM users WHERE email = :email"),
-                    {"email": st.user.email},
-                ).fetchone()
+        with conn.session as s:
+            sqlite_current_user = s.execute(
+                text("SELECT data FROM users WHERE email = :email"),
+                {"email": st.user.email},
+            ).fetchone()
 
-            if sqlite_current_user:  # existing user
-                user_data = UserDataModel.parse_raw(sqlite_current_user._mapping["data"])
-            else:  # new user
-                user_data = UserDataModel(name=st.user.name, email=st.user.email)
-        else:  # anonymous user
-            user_data = UserDataModel()
-        st.session_state["user_data"] = user_data
+        if sqlite_current_user:  # existing user
+            user_data = UserDataModel.parse_raw(sqlite_current_user._mapping["data"])
+        else:  # new user
+            user_data = UserDataModel(name=st.user.name, email=st.user.email)
+    else:  # anonymous user
+        user_data = UserDataModel()
+    st.session_state["user_data"] = user_data
 
 
 def save_user_data(user_data):

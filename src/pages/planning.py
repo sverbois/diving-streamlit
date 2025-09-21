@@ -2,8 +2,10 @@ import pandas as pd
 import streamlit as st
 
 from utils import CYLINDER_VOLUMES
+from utils import get_user_data
 
-user_data = st.session_state["user_data"]
+USER_DATA = get_user_data()
+
 ASCENT_SPEED = 10  # m/min
 DESCENT_SPEED = 20  # m/min
 DECO_DEPTH = 6  # m
@@ -63,7 +65,7 @@ with st.expander("Description"):
     )
 with st.container(border=True):
     col1, col2 = st.columns(2)
-    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=user_data.rmv, step=1)
+    rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=USER_DATA.rmv, step=1)
     cylinder_volume = col1.selectbox(
         label="Cylinder volume (L)",
         options=CYLINDER_VOLUMES,
