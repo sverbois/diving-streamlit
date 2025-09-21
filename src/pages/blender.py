@@ -1,5 +1,6 @@
 import streamlit as st
 
+from utils import CYLINDER_VOLUMES
 from utils import get_missing_gases_pressures
 
 # CSS pour styliser les labels des métriques
@@ -18,20 +19,20 @@ st.markdown(
 
 st.title("Gas blender")
 
-st.subheader("Volume de la bouteille")
+st.subheader("Cylinder volume")
 
 cylinder_volume = st.selectbox(
-    label="Volume bouteille (L)",
+    label="Cylinder volume (L)",
     label_visibility="collapsed",
-    options=(10, 12, 15, 16, 20, 24),
+    options=CYLINDER_VOLUMES,
     index=2,
     format_func=lambda x: f"{x} L",
 )
 
-st.subheader("Mélange actuel")
+st.subheader("Current mix")
 with st.container(border=True, horizontal=True):
     start_pressure = st.number_input(
-        label="Pression actuelle (en bars)",
+        label="Current pressure (in bar)",
         value=50,
         step=1,
         format="%d",
@@ -39,24 +40,24 @@ with st.container(border=True, horizontal=True):
         max_value=300,
     )
     start_o2 = st.number_input(
-        label="O2 actuel dans le mélange (en %)",
+        label="Current O2 in the mix (in %)",
         min_value=10,
         max_value=100,
         value=21,
         step=1,
     )
     start_he = st.number_input(
-        label="He actuel dans le mélange (en %)",
+        label="Current He in the mix (in %)",
         min_value=0,
         max_value=70,
         value=0,
         step=1,
     )
 
-st.subheader("Mélange désiré")
+st.subheader("Desired mix")
 with st.container(border=True, horizontal=True):
     end_pressure = st.number_input(
-        label="Pression désirée (en bars)",
+        label="Desired pressure (in bar)",
         value=200,
         step=1,
         format="%d",
@@ -64,14 +65,14 @@ with st.container(border=True, horizontal=True):
         max_value=300,
     )
     end_o2 = st.number_input(
-        label="O2 désiré dans le mélange (en %)",
+        label="Desired O2 in the mix (in %)",
         min_value=10,
         max_value=100,
         value=21,
         step=1,
     )
     end_he = st.number_input(
-        label="He désiré dans le mélange (en %)",
+        label="Desired He in the mix (in %)",
         min_value=0,
         max_value=70,
         value=0,
@@ -94,7 +95,7 @@ ps = {
     "air": missing["air"] / cylinder_volume,
 }
 
-st.subheader("Gaz à ajouter")
+st.subheader("Gases to add")
 g1, g2 = st.columns(2, border=True)
 with g1:
     st.markdown("#### O2 → He → Air")
@@ -143,5 +144,5 @@ with g2:
             border=True,
         )
 
-st.subheader("Coût du mélange")
+st.subheader("Cost of the mix")
 st.write("TODO")

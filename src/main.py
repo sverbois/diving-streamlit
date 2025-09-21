@@ -1,5 +1,10 @@
 import streamlit as st
 
+from utils import initialize_session
+
+st.set_page_config(page_title="Diving Apps", page_icon=":material/scuba_diving:")
+initialize_session()
+
 streamlit_style = """
 <style>
   .st-key-user_actions p {font-size: 1.2rem !important;}
@@ -30,12 +35,12 @@ nitrox_page = st.Page(
     icon=":material/bubble_chart:",
 )
 gas_planning_page = st.Page(
-    "pages/gas_planning.py",
+    "pages/planning.py",
     title="Gas planning",
     icon=":material/scuba_diving:",
 )
 gas_blender_page = st.Page(
-    "pages/gas_blender.py",
+    "pages/blender.py",
     title="Gas blender",
     icon=":material/auto_fix_high:",
 )
@@ -56,9 +61,6 @@ if st.user.is_logged_in:
         pages.append(statistics_page)
 
 pg = st.navigation(pages, position="sidebar")
-pg.run()
-
-st.set_page_config(page_title="Diving Apps", page_icon=":material/scuba_diving:")
 
 with st.sidebar:
     if not st.user.is_logged_in:
@@ -76,3 +78,5 @@ with st.sidebar:
         elif action == "Profile":
             st.switch_page(profile_page)
             st.rerun()
+
+pg.run()

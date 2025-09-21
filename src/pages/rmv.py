@@ -1,5 +1,7 @@
 import streamlit as st
 
+from utils import CYLINDER_VOLUMES
+
 
 def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth):
     if not (cylinder_volume and start_pressure and end_pressure and dive_time and mean_depth):
@@ -11,21 +13,21 @@ def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_d
 st.title("RMV")
 with st.expander("Description"):
     st.markdown(
-        "Le **RMV** (Respiratory Minute Volume) est la quantité d'air ou de gaz respiré par un plongeur en une minute. "
-        "Il est exprimé en litres par minute (L/min). "
-        "Connaître son RMV permet de mieux planifier ses plongées et de gérer sa consommation de gaz."
+        "RMV (Respiratory Minute Volume) is the amount of air or gas breathed by a diver in one minute. "
+        "It is expressed in liters per minute (L/min). "
+        "Knowing your RMV allows you to better plan your dives and manage your gas consumption."
     )
 
 cylinder_volume = st.radio(
-    label="Volume bouteille (en litres)",
-    options=(10, 12, 15, 16, 20, 24),
+    label="Cylinder volume (in liters)",
+    options=CYLINDER_VOLUMES,
     index=2,
     horizontal=True,
     format_func=lambda x: f"{x} L",
 )
 left, right = st.columns(2, vertical_alignment="bottom")
 start_pressure = left.number_input(
-    label="Pression début plongée (en bars)",
+    label="Starting pressure (in bars)",
     value=200,
     step=10,
     format="%d",
@@ -33,7 +35,7 @@ start_pressure = left.number_input(
     max_value=300,
 )
 end_pressure = left.number_input(
-    label="Pression fin plongée (en bars)",
+    label="Ending pressure (in bars)",
     value=50,
     step=10,
     format="%d",
@@ -41,7 +43,7 @@ end_pressure = left.number_input(
     max_value=start_pressure - 10,
 )
 dive_time = right.number_input(
-    label="Durée plongée (en minutes)",
+    label="Dive time (in minutes)",
     value=45,
     step=1,
     format="%d",
@@ -49,7 +51,7 @@ dive_time = right.number_input(
     max_value=120,
 )
 mean_depth = right.number_input(
-    label="Profondeur moyenne (en mètres)",
+    label="Mean depth (in meters)",
     value=15.0,
     step=0.5,
     format="%0.1f",
@@ -58,4 +60,4 @@ mean_depth = right.number_input(
 )
 st.divider()
 rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth)
-st.markdown(f"<h3 class='center'>Votre RMV est de {rmv:.1f} L/min</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 class='center'>Your RMV is {rmv:.1f} L/min</h3>", unsafe_allow_html=True)

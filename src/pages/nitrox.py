@@ -29,20 +29,20 @@ def equivalent_air_depth(o2_percentage, nitrox_depth):
 st.title("Nitrox")
 with st.expander("Description"):
     st.markdown(
-        "Le **Nitrox** est un mélange enrichi en oxygène. Il contient juste qu'à 40% d'oxygène pour un gaz de fond et jusqu'à 100% pour un gaz de déco."
+        "**Nitrox** is an oxygen-enriched mixture. It contains as little as 40% oxygen for a bottom gas and up to 100% for a decompression gas."
     )
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Profondeur maximale d'utilisation (MOD)</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 class='center'>Maximum operating depth (MOD)</h3>", unsafe_allow_html=True)
     l1c1, l1c2 = st.columns(2)
     mod_ppo2_max = l1c1.selectbox(
-        label="PPO2 max (en bar)",
+        label="PPO2 max (in bar)",
         options=(1.3, 1.4, 1.5, 1.6),
         index=3,
         format_func=lambda x: f"{x} bar",
         key="mod_ppo2_max",
     )
     mod_o2_max = l1c2.slider(
-        label="O2 dans le Nitrox (en %)",
+        label="O2 in Nitrox (in %)",
         min_value=21,
         max_value=100,
         value=40,
@@ -55,17 +55,17 @@ with st.container(border=True):
     )
 
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Meilleur Nitrox</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 class='center'>Best Nitrox</h3>", unsafe_allow_html=True)
     l2c1, l2c2 = st.columns(2)
     best_ppo2_max = l2c1.selectbox(
-        label="PPO2 max (en bar)",
+        label="PPO2 max (in bar)",
         options=(1.3, 1.4, 1.5, 1.6),
         index=3,
         format_func=lambda x: f"{x} bar",
         key="best_ppo2_max",
     )
     best_max_depth = l2c2.slider(
-        label="Profondeur max (en m)",
+        label="Maximum depth (in m)",
         min_value=15,
         max_value=68,
         value=30,
@@ -75,10 +75,10 @@ with st.container(border=True):
     st.markdown(f"<h2 class='center'>{best_mix(best_ppo2_max, best_max_depth)} % O2</h2>", unsafe_allow_html=True)
 
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Profondeur équivalente à l'air (EAD)</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 class='center'>Equivalent air depth (EAD)</h3>", unsafe_allow_html=True)
     l3c1, l3c2 = st.columns(2)
     o2percentage = l3c1.slider(
-        label="O2 dans le Nitrox (en %)",
+        label="O2 in Nitrox (in %)",
         min_value=21,
         max_value=40,
         value=21,
@@ -86,7 +86,7 @@ with st.container(border=True):
         key="o2percentage",
     )
     depth = l3c2.slider(
-        label="Profondeur (en m)",
+        label="Depth (in m)",
         min_value=20,
         max_value=68,
         value=30,

@@ -1,12 +1,9 @@
 import pandas as pd
 import streamlit as st
 
-from utils import initialize_session
+from utils import CYLINDER_VOLUMES
 
-initialize_session()
 user_data = st.session_state["user_data"]
-
-
 ASCENT_SPEED = 10  # m/min
 DESCENT_SPEED = 20  # m/min
 DECO_DEPTH = 6  # m
@@ -17,7 +14,7 @@ COLUMN_CONFIG = {
         width=30,
     ),
     "depth": st.column_config.NumberColumn(
-        "Profondeur (m)",
+        "Depth (m)",
         min_value=10,
         max_value=68,
         step=1,
@@ -26,10 +23,10 @@ COLUMN_CONFIG = {
     ),
     # Colonne d'affichage (texte) pour masquer la profondeur pendant les phases de montée/descente
     "depth_display": st.column_config.TextColumn(
-        "Profondeur (m)",
+        "Depth (m)",
     ),
     "duration": st.column_config.NumberColumn(
-        "Durée (min)",
+        "Duration (min)",
         min_value=1,
         max_value=90,
         step=1,
@@ -37,15 +34,15 @@ COLUMN_CONFIG = {
         required=True,
     ),
     "consumption": st.column_config.NumberColumn(
-        "Consommation (L)",
+        "Consumption (L)",
         format="%d L",
     ),
     "runtime": st.column_config.NumberColumn(
-        "Temps cumulé (min)",
+        "Cumulative time (min)",
         format="%d min",
     ),
     "pressure": st.column_config.NumberColumn(
-        "Pression (bar)",
+        "Pressure (bar)",
         format="%d bar",
     ),
 }
@@ -61,25 +58,25 @@ ICONS = {
 st.title("Gas planning")
 with st.expander("Description"):
     st.markdown(
-        "Ce formulaire calcule la consommation de gaz lors d'une plongée multi-niveaux. "
-        "On considère que les paliers sont effectués à une profondeur moyenne de 6 m avec un palier de sécurité de 5 minutes."
+        "This form calculates gas consumption during a multi-level dive. "
+        "It is assumed that the stops are made at an average depth of 6 m with a safety stop of 5 minutes."
     )
 with st.container(border=True):
     col1, col2 = st.columns(2)
     rmv = col1.slider("RMV (L/min)", min_value=8, max_value=25, value=user_data.rmv, step=1)
     cylinder_volume = col1.selectbox(
-        label="Volume bouteille (L)",
-        options=(10, 12, 15, 16, 20, 24),
+        label="Cylinder volume (L)",
+        options=CYLINDER_VOLUMES,
         index=2,
         format_func=lambda x: f"{x} L",
     )
-    cylinder_pressure = col1.slider("Pression bouteille (bar)", min_value=50, max_value=300, value=200, step=10)
-    col2.text("Paramètres plongée")
+    cylinder_pressure = col1.slider("Cylinder pressure (bar)", min_value=50, max_value=300, value=200, step=10)
+    col2.text("Dive parameters")
     data_default = pd.DataFrame([{"depth": 40, "duration": 5}, {"depth": 20, "duration": 10}])
     data = col2.data_editor(
         data_default, num_rows="dynamic", column_order=["depth", "duration"], column_config=COLUMN_CONFIG
     )
-    decompression_time = col2.slider("Temps paliers (min)", min_value=0, max_value=20, value=0, step=1)
+    decompression_time = col2.slider("Decompression time (min)", min_value=0, max_value=20, value=0, step=1)
 
 
 def add_ascent_and_descent_data(df: pd.DataFrame) -> pd.DataFrame:
@@ -146,22 +143,22 @@ total_time_in_min = int(fulldata["duration"].sum())
 
 if reserve_in_bar < 50:
     st.markdown(
-        "<div class='center danger'><h3>DANGER</h3><h5>Votre réserve est insuffisante !</h5></div>",
+        "<div class='center danger'><h3>DANGER !</h3><h5>Your reserve is insufficient !</h5></div>",
         unsafe_allow_html=True,
     )
 with st.container(horizontal=True):
     st.metric(
-        label="Temps total (min)",
+        label="Total time (min)",
         value=f"{total_time_in_min} min",
         border=True,
     )
     st.metric(
-        label="Consommation (L)",
+        label="Consumption (L)",
         value=f"{total_consumption_in_l} L",
         border=True,
     )
     st.metric(
-        label="Réserve (bar)",
+        label="Reserve (bar)",
         value=f"{reserve_in_bar} bar",
         border=True,
     )

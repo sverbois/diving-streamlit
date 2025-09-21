@@ -8,6 +8,8 @@ from sqlalchemy import text
 # Voir https://www.sqlitetutorial.net/sqlite-json/ pour l'utilisation de JSON avec SQLite
 # Voir https://st-pydantic.streamlit.app/ pour des exemples de streamlit-pydantic
 
+CYLINDER_VOLUMES = (10, 12, 14, 15, 16, 17, 18, 20, 24)
+
 
 class UserDataModel(BaseModel):
     # name: str = Field(default="Anonymous", description="Nom dans l'application")
