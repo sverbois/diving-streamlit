@@ -1,4 +1,7 @@
+import math
+
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
 from utils import CYLINDER_VOLUMES
@@ -35,6 +38,10 @@ COLUMN_CONFIG = {
         step=1,
         format="%d min",
         required=True,
+    ),
+    "duration_display": st.column_config.NumberColumn(
+        "Duration (min)",
+        format="%d min",
     ),
     "consumption": st.column_config.NumberColumn(
         "Consumption (L)",
@@ -111,6 +118,14 @@ def add_ascent_and_descent_data(df: pd.DataFrame) -> pd.DataFrame:
                 }
             )
             rows[0]["type"] = "start"
+        if rows[-1]["type"] == "deco":
+            rows.append(
+                {
+                    "depth": 0,
+                    "duration": rows[-1]["depth"] / ASCENT_SPEED,
+                    "type": "ascent",
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -119,13 +134,13 @@ fulldata = add_ascent_and_descent_data(
     data,
 )
 
-
 pressures = 1 + fulldata["depth"] / 10
 fulldata["consumption"] = pressures * rmv * fulldata["duration"]
 fulldata["icon"] = fulldata["type"].map(ICONS)
 fulldata["runtime"] = fulldata["duration"].cumsum()
 fulldata["pressure"] = cylinder_pressure - (fulldata["consumption"].cumsum() / cylinder_volume)
-
+# Arrondir les durées à l'entier supérieur pour l'affichage
+fulldata["duration_display"] = fulldata["duration"].apply(math.ceil)
 # Masque la profondeur pour les segments de montée / descente dans l'affichage final
 fulldata["depth_display"] = fulldata.apply(
     lambda r: "⬆️" if r["type"] == "ascent" else "⬇️" if r["type"] == "descent" else f"{int(r['depth'])} m",
@@ -135,7 +150,7 @@ fulldata["depth_display"] = fulldata.apply(
 st.dataframe(
     fulldata,
     hide_index=True,
-    column_order=["depth_display", "duration", "consumption", "runtime", "pressure"],
+    column_order=["depth_display", "duration_display", "consumption", "runtime", "pressure"],
     column_config=COLUMN_CONFIG,
 )
 
@@ -165,3 +180,25 @@ with st.container(horizontal=True):
         value=f"{reserve_in_bar} bar",
         border=True,
     )
+
+partialdata = fulldata[["depth", "runtime", "type"]]
+for i in range(len(partialdata)):
+    if partialdata.iloc[i]["type"] in ["ascent", "descent"]:
+        # Si ce n'est pas la dernière ligne, utilise la profondeur de la ligne suivante
+        if i + 1 < len(partialdata):
+            partialdata.iloc[i, partialdata.columns.get_loc("depth")] = partialdata.iloc[i + 1]["depth"]
+
+fig = px.line(
+    partialdata,
+    x="runtime",
+    y="depth",
+    # title="Diving profile",
+    labels={"runtime": "Runtime (min)", "depth": "Depth (m)"},
+)
+fig.update_yaxes(autorange="reversed")
+
+plotly_config = {
+    "displaylogo": False,
+    "modeBarButtonsToRemove": ["zoom", "zoomin", "zoomout", "autoscale", "resetscale", "pan"],
+}
+st.plotly_chart(fig, use_container_width=True, config=plotly_config)
