@@ -48,7 +48,7 @@ COLUMN_CONFIG = {
         format="%d L",
     ),
     "runtime": st.column_config.NumberColumn(
-        "Cumulative time (min)",
+        "Runtime (min)",
         format="%d min",
     ),
     "pressure": st.column_config.NumberColumn(

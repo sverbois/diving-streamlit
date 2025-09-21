@@ -1,5 +1,8 @@
 import streamlit as st
 
+from utils import DEFAULT_PPO2_INDEX
+from utils import PPO2_VALUES
+
 
 def compute_mod(ppo2_max, o2_percentage):
     if not (ppo2_max and o2_percentage):
@@ -36,8 +39,8 @@ with st.container(border=True):
     l1c1, l1c2 = st.columns(2)
     mod_ppo2_max = l1c1.selectbox(
         label="PPO2 max (in bar)",
-        options=(1.3, 1.4, 1.5, 1.6),
-        index=3,
+        options=PPO2_VALUES,
+        index=DEFAULT_PPO2_INDEX,
         format_func=lambda x: f"{x} bar",
         key="mod_ppo2_max",
     )
@@ -59,8 +62,8 @@ with st.container(border=True):
     l2c1, l2c2 = st.columns(2)
     best_ppo2_max = l2c1.selectbox(
         label="PPO2 max (in bar)",
-        options=(1.3, 1.4, 1.5, 1.6),
-        index=3,
+        options=PPO2_VALUES,
+        index=DEFAULT_PPO2_INDEX,
         format_func=lambda x: f"{x} bar",
         key="best_ppo2_max",
     )
@@ -94,3 +97,7 @@ with st.container(border=True):
         key="depth",
     )
     st.markdown(f"<h2 class='center'>{equivalent_air_depth(o2percentage, depth)} m</h2>", unsafe_allow_html=True)
+
+with st.container(border=True):
+    st.markdown("<h3 class='center'>Partial pressure O2 (PP02)</h3>", unsafe_allow_html=True)
+    st.write("TODO")

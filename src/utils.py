@@ -8,6 +8,8 @@ from sqlalchemy import text
 # Voir https://www.sqlitetutorial.net/sqlite-json/ pour l'utilisation de JSON avec SQLite
 # Voir https://st-pydantic.streamlit.app/ pour des exemples de streamlit-pydantic
 
+PPO2_VALUES = (0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
+DEFAULT_PPO2_INDEX = 6
 CYLINDER_VOLUMES = (10, 12, 14, 15, 16, 17, 18, 20, 24)
 DEFAULT_CYLINDER_VOLUME_INDEX = 3
 
