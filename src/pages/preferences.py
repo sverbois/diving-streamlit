@@ -9,7 +9,7 @@ USER_DATA = get_user_data()
 st.title("Preferences")
 with st.expander("Description"):
     st.markdown("This page allow you to set preferences that will be used as default values in the different tools.")
-st.subheader(st.user.email)
+st.header(st.user.name)
 
 profile1, profile2 = st.tabs(["Diving preferences", "Blender prices"])
 
