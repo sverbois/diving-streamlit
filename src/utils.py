@@ -9,6 +9,7 @@ from sqlalchemy import text
 # Voir https://st-pydantic.streamlit.app/ pour des exemples de streamlit-pydantic
 
 CYLINDER_VOLUMES = (10, 12, 14, 15, 16, 17, 18, 20, 24)
+DEFAULT_CYLINDER_VOLUME_INDEX = 3
 
 
 class UserDataModel(BaseModel):

@@ -1,6 +1,7 @@
 import streamlit as st
 
 from utils import CYLINDER_VOLUMES
+from utils import DEFAULT_CYLINDER_VOLUME_INDEX
 from utils import get_missing_gases_pressures
 
 # CSS pour styliser les labels des métriques
@@ -25,7 +26,7 @@ cylinder_volume = st.selectbox(
     label="Cylinder volume (L)",
     label_visibility="collapsed",
     options=CYLINDER_VOLUMES,
-    index=2,
+    index=DEFAULT_CYLINDER_VOLUME_INDEX,
     format_func=lambda x: f"{x} L",
 )
 

@@ -1,6 +1,7 @@
 import streamlit as st
 
 from utils import CYLINDER_VOLUMES
+from utils import DEFAULT_CYLINDER_VOLUME_INDEX
 
 
 def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth):
@@ -21,7 +22,7 @@ with st.expander("Description"):
 cylinder_volume = st.radio(
     label="Cylinder volume (in liters)",
     options=CYLINDER_VOLUMES,
-    index=2,
+    index=DEFAULT_CYLINDER_VOLUME_INDEX,
     horizontal=True,
     format_func=lambda x: f"{x} L",
 )

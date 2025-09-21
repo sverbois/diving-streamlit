@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from utils import CYLINDER_VOLUMES
+from utils import DEFAULT_CYLINDER_VOLUME_INDEX
 from utils import get_user_data
 
 USER_DATA = get_user_data()
@@ -69,7 +70,7 @@ with st.container(border=True):
     cylinder_volume = col1.selectbox(
         label="Cylinder volume (L)",
         options=CYLINDER_VOLUMES,
-        index=2,
+        index=DEFAULT_CYLINDER_VOLUME_INDEX,
         format_func=lambda x: f"{x} L",
     )
     cylinder_pressure = col1.slider("Cylinder pressure (bar)", min_value=50, max_value=300, value=200, step=10)
