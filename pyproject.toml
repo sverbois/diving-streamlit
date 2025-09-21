@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "authlib>=1.6.4",
+    "plotly>=6.3.0",
     "pydantic[email]<2.0.0",
     "sqlalchemy>=2.0.43",
     "streamlit>=1.49.1",
