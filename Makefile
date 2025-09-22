@@ -4,7 +4,7 @@ help:
 
 .PHONY: start  # Start component
 start:
-	uv run streamlit run src/main.py
+	uv run --group dev streamlit run src/main.py
 
 .PHONY: clean  # Clean development environment
 clean:

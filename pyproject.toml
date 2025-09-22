@@ -12,3 +12,11 @@ dependencies = [
     "streamlit>=1.49.1",
     "streamlit-pydantic>=0.6.0",
 ]
+
+[dependency-groups]
+dev = [
+    "watchdog>=6.0.0",
+]
+
+[tool.uv]
+default-groups = []
