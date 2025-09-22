@@ -2,7 +2,7 @@ import streamlit as st
 
 from utils import initialize_session
 
-st.set_page_config(page_title="Diving Apps", page_icon=":material/scuba_diving:")
+st.set_page_config(page_title="Diving Tools", page_icon=":material/scuba_diving:")
 initialize_session()
 
 streamlit_style = """
