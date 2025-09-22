@@ -146,4 +146,56 @@ with g2:
         )
 
 st.subheader("Cost of the mix")
-st.write("TODO")
+mix_price = 3.0
+o2_price = 0.025
+he_price = 0.08
+air_price = {
+    3: 3.0,
+    15: 6.0,
+    24: 8.0,
+}
+
+gas_number = sum(1 for value in missing.values() if value > 0)
+if gas_number > 1:
+    base_cost = 3.0  # Base price for mixing more than one gas
+else:
+    for volume, price in air_price.items():
+        if cylinder_volume <= volume:
+            base_cost = price
+            break
+o2_cost = missing["o2"] * o2_price
+he_cost = missing["he"] * he_price
+total_cost = base_cost + o2_cost + he_cost
+
+with st.container(border=True):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if gas_number > 1:
+            st.metric("Mix", f"{base_cost:.2f} €", help="Base cost for multi-gas mix")
+        else:
+            st.metric("Air only", f"{base_cost:.2f} €", help="Air filling cost")
+    with col2:
+        if o2_cost > 0:
+            st.metric(
+                "O₂",
+                f"{o2_cost:.2f} €",
+                delta=f"{missing['o2']:.0f} L × {o2_price:.3f} €/L",
+                help="Cost of added oxygen",
+            )
+        else:
+            st.metric("O₂", "0.00 €", help="No oxygen added")
+    with col3:
+        if he_cost > 0:
+            st.metric(
+                "He",
+                f"{he_cost:.2f} €",
+                delta=f"{missing['he']:.0f} L × {he_price:.3f} €/L",
+                help="Cost of added helium",
+            )
+        else:
+            st.metric("He", "0.00 €", help="No helium added")
+    st.divider()
+    st.markdown(
+        f"<h2 class='center'>Total: {total_cost:.2f} €</h2>",
+        unsafe_allow_html=True,
+    )
