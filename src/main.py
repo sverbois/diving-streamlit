@@ -9,13 +9,16 @@ streamlit_style = """
 <style>
   .st-key-user_actions p {font-size: 1.2rem !important;}
   .center {text-align: center;}
-  .mt-0 {margin-top: 0px;}
+  .pt-0 {padding-top: 0px !important;}
+  .mt-0 {margin-top: 0px !important;}
+  .pb-0 {padding-bottom: 0px !important;}
+  .mb-0 {margin-bottom: 0px !important;}
   .danger {color: red !important; border: 2px solid red; padding: 0.5rem; margin: 1rem 0rem;}
-  div.stMainBlockContainer {padding-top: 1rem !important;}
+  div.stMainBlockContainer {padding-top: 2rem !important;}
   hr {margin: 0px !important;}
 </style>
 """
-st.markdown(streamlit_style, unsafe_allow_html=True)
+st.html(streamlit_style)
 
 # Voir la liste des icon possibles ici : https://fonts.google.com/icons?icon.set=Material+Icons
 
