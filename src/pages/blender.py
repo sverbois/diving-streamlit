@@ -5,7 +5,7 @@ from utils import DEFAULT_CYLINDER_VOLUME_INDEX
 from utils import get_missing_gases_pressures
 
 # CSS pour styliser les labels des métriques
-st.markdown(
+st.html(
     """
 <style>
 .stMetric label p {
@@ -14,8 +14,7 @@ st.markdown(
     color: #ff4b4b !important;
 }
 </style>
-""",
-    unsafe_allow_html=True,
+"""
 )
 
 st.title("Gas blender")

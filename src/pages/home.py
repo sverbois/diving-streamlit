@@ -2,10 +2,7 @@ import streamlit as st
 
 st.title("Plan and Dive")
 st.write("A few tools to help you plan your dives. Use the navigation on the left to access the different tools.")
-st.markdown(
-    """<div style="text-align: center; font-size: 200px;">🤿</div>""",
-    unsafe_allow_html=True,
-)
+st.html("""<div style="text-align: center; font-size: 200px;">🤿</div>""")
 with st.container(border=True):
     st.subheader("Disclaimer")
     st.markdown(
@@ -16,6 +13,5 @@ with st.container(border=True):
 
         - All calculations and recommendations should be **verified independently** using certified dive tables, dive computers, or professional dive planning software.
         - The developers of this application **disclaim all liability** for any injury, damage, or loss resulting from the use of these tools.
-        """,
-        unsafe_allow_html=True,
+        """
     )
