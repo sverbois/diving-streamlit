@@ -23,37 +23,37 @@ st.html(streamlit_style)
 # Voir la liste des icon possibles ici : https://fonts.google.com/icons?icon.set=Material+Icons
 
 home_page = st.Page(
-    "pages/home.py",
+    "tools/home.py",
     title="Home",
     icon=":material/home:",
 )
 rmv_page = st.Page(
-    "pages/rmv.py",
+    "tools/rmv.py",
     title="RMV",
     icon=":material/air:",
 )
 nitrox_page = st.Page(
-    "pages/nitrox.py",
+    "tools/nitrox.py",
     title="Nitrox",
     icon=":material/bubble_chart:",
 )
 gas_planning_page = st.Page(
-    "pages/planning.py",
+    "tools/planning.py",
     title="Gas planning",
     icon=":material/scuba_diving:",
 )
 gas_blender_page = st.Page(
-    "pages/blender.py",
+    "tools/blender.py",
     title="Gas blender",
     icon=":material/auto_fix_high:",
 )
 preferences_page = st.Page(
-    "pages/preferences.py",
+    "tools/preferences.py",
     title="Preferences",
     icon=":material/person:",
 )
 statistics_page = st.Page(
-    "pages/statistics.py",
+    "tools/statistics.py",
     title="Statistics",
     icon=":material/bar_chart:",
 )
