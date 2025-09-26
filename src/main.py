@@ -3,6 +3,15 @@ import streamlit as st
 from utils import initialize_session
 
 st.set_page_config(page_title="Diving Tools", page_icon=":material/scuba_diving:")
+st.logo(
+    """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 325 55" role="img" aria-label="Logo">
+        <text x="0" y="36" font-size="52" dominant-baseline="middle">🤿</text>
+        <text x="75" y="30" font-size="46" font-family="Source Sans, sans-serif" font-weight="500" dominant-baseline="middle">
+            Diving Tools
+        </text>
+    </svg>""",
+    size="large",
+)
 initialize_session()
 
 streamlit_style = """
