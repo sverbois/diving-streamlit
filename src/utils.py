@@ -1,11 +1,8 @@
-import json
-
 import streamlit as st
-from pydantic import BaseModel
-from pydantic import Field
-from sqlalchemy import text
 
-# Voir https://www.sqlitetutorial.net/sqlite-json/ pour l'utilisation de JSON avec SQLite
+from db import UserDataModel
+from db import get_user
+
 # Voir https://st-pydantic.streamlit.app/ pour des exemples de streamlit-pydantic
 
 PPO2_VALUES = (0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
@@ -14,72 +11,18 @@ CYLINDER_VOLUMES = (10, 12, 14, 15, 16, 17, 18, 20, 24)
 DEFAULT_CYLINDER_VOLUME_INDEX = 3
 
 
-class UserDataModel(BaseModel):
-    # name: str = Field(default="Anonymous", description="Nom dans l'application")
-    # email: str = Field(
-    #     default="anonymous@domain.com",
-    #     description="Courriel",
-    #     readOnly=True,
-    # )
-    rmv: int = Field(default=20, title="RMV in L/min")
-    descent_speed: int = Field(default=20, title="Descent speed in m/min")
-
-
 def get_user_data():
     if "user_data" not in st.session_state:
-        initialize_session()
-    return st.session_state["user_data"]
-
-
-def initialize_session():
-    if st.user.is_logged_in:
-        conn = st.connection("sqlite", type="sql")
-        with conn.session as s:
-            s.execute(
-                text(
-                    """
-                    CREATE TABLE IF NOT EXISTS users (
-                        email TEXT PRIMARY KEY,
-                        data  JSON CHECK (json_valid(data))
-                    );
-                    """
-                )
-            )
-            s.commit()
-
-        with conn.session as s:
-            sqlite_current_user = s.execute(
-                text("SELECT data FROM users WHERE email = :email"),
-                {"email": st.user.email},
-            ).fetchone()
-
-        if sqlite_current_user:  # existing user
-            user_data = UserDataModel.parse_raw(sqlite_current_user._mapping["data"])
-        else:  # new user
-            user_data = UserDataModel(name=st.user.name, email=st.user.email)
-    else:  # anonymous user
-        user_data = UserDataModel()
-    st.session_state["user_data"] = user_data
-
-
-def save_user_data(user_data):
-    if st.user.is_logged_in:
-        conn = st.connection("sqlite", type="sql")
-        with conn.session as s:
-            s.execute(
-                text(
-                    """
-                    INSERT OR REPLACE INTO users (email, data)
-                    VALUES (:email, :data);
-                    """
-                ),
-                {
-                    "email": st.user.email,
-                    "data": json.dumps(user_data.dict()),
-                },
-            )
-            s.commit()
+        if st.user.is_logged_in:  # authenticated user
+            user = get_user(st.user.email)
+            if user:  # existing user
+                user_data = UserDataModel.parse_obj(user.data)
+            else:  # new user
+                user_data = UserDataModel(name=st.user.name, email=st.user.email)
+        else:  # anonymous user
+            user_data = UserDataModel()
         st.session_state["user_data"] = user_data
+    return st.session_state["user_data"]
 
 
 def get_missing_gases_pressures(
