@@ -1,8 +1,8 @@
 import streamlit as st
 
+from db import get_users
+
 st.title("Statistics")
 
 st.subheader("Users in database")
-conn = st.connection("sqlite", type="sql")
-users = conn.query("SELECT email,data FROM users", ttl=0)
-st.dataframe(users)
+st.dataframe(get_users())

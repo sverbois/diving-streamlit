@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit_pydantic as sp
 
+from db import save_user
 from utils import get_user_data
-from utils import save_user_data
 
 USER_DATA = get_user_data()
 
@@ -16,7 +16,7 @@ profile1, profile2 = st.tabs(["Diving preferences", "Blender prices"])
 with profile1:
     data = sp.pydantic_form(key="user_form", model=USER_DATA, submit_label="Save my profile")
     if data:
-        save_user_data(data)
+        save_user(data)
         st.toast("Profile saved successfully!", icon="✅")
 
 with profile2:

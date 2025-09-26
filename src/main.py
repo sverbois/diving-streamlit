@@ -1,6 +1,8 @@
 import streamlit as st
 
-from utils import initialize_session
+from db import initialize_db
+
+initialize_db()
 
 st.set_page_config(page_title="Diving Tools", page_icon=":material/scuba_diving:")
 st.logo(
@@ -12,7 +14,6 @@ st.logo(
     </svg>""",
     size="large",
 )
-initialize_session()
 
 streamlit_style = """
 <style>
