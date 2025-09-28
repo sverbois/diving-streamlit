@@ -57,6 +57,11 @@ gas_blender_page = st.Page(
     title="Gas blender",
     icon=":material/auto_fix_high:",
 )
+gf_page = st.Page(
+    "tools/gf.py",
+    title="Gradient Factor",
+    icon=":material/water_drop:",
+)
 preferences_page = st.Page(
     "tools/preferences.py",
     title="Preferences",
@@ -67,7 +72,14 @@ statistics_page = st.Page(
     title="Statistics",
     icon=":material/bar_chart:",
 )
-pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
+pages = [
+    home_page,
+    rmv_page,
+    nitrox_page,
+    gas_planning_page,
+    gas_blender_page,
+    gf_page,
+]
 if st.user.is_logged_in:
     pages.append(preferences_page)
     if st.user.email == "sebastien.verbois@gmail.com":
