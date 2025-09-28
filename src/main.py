@@ -62,6 +62,11 @@ gas_blender_page = st.Page(
     title="Gas blender",
     icon=":material/auto_fix_high:",
 )
+gf_page = st.Page(
+    "tools/gf.py",
+    title="Gradient Factor",
+    icon=":material/water_drop:",
+)
 preferences_page = st.Page(
     "tools/preferences.py",
     title="Preferences",
@@ -80,7 +85,7 @@ qfactor_page = st.Page(
 pages = {
     "": [home_page],
     "Tools": [rmv_page, nitrox_page, trimix_page, gas_planning_page, gas_blender_page],
-    "Concepts": [qfactor_page],
+    "Concepts": [qfactor_page, gf_page],
 }
 if st.user.is_logged_in:
     pages["User"] = [preferences_page]
