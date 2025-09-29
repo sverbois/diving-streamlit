@@ -67,11 +67,15 @@ statistics_page = st.Page(
     title="Statistics",
     icon=":material/bar_chart:",
 )
-pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
+# pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
+pages = {
+    "": [home_page],
+    "Tools": [rmv_page, nitrox_page, gas_planning_page, gas_blender_page],
+}
 if st.user.is_logged_in:
-    pages.append(preferences_page)
+    pages["User"] = [preferences_page]
     if st.user.email == "sebastien.verbois@gmail.com":
-        pages.append(statistics_page)
+        pages["User"].append(statistics_page)
 
 pg = st.navigation(pages, position="sidebar")
 
