@@ -79,17 +79,7 @@ with st.sidebar:
     if not st.user.is_logged_in:
         st.button("Login with Google", on_click=st.login, args=["google"])
     else:
-        action = st.selectbox(
-            label=f"**{st.user.name}**",
-            options=("Preferences", "Logout"),
-            index=None,
-            placeholder="Actions…",
-            key="user_actions",
-        )
-        if action == "Logout":
-            st.logout()
-        elif action == "Preferences":
-            st.switch_page(preferences_page)
-            st.rerun()
+        st.subheader(st.user.name)
+        st.button("Logout", on_click=st.logout)
 
 pg.run()
