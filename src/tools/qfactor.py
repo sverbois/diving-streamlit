@@ -114,10 +114,10 @@ st.header("Examples")
 table = pd.DataFrame(
     [
         {
+            "Dive type": kind,
             "Time (min)": EXAMPLE_TIME,
             "Depth (m)": round(q / (EXAMPLE_TIME**0.5)),
             "Engagement (Q)": q,
-            "Dive type": kind,
             "Risk of DCS": dci_risq_for_q(q),
         }
         for kind, q in CATEGORIES
