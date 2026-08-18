@@ -74,7 +74,7 @@ statistics_page = st.Page(
 )
 qfactor_page = st.Page(
     "tools/qfactor.py",
-    title="Q Factor / Dive engagement",
+    title="Dive engagement / Q Factor",
     icon=":material/speed:",
 )
 pages = {

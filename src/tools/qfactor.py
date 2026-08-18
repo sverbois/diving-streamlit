@@ -65,7 +65,7 @@ def dci_risq_for_q(q):
     return "??/100"
 
 
-st.title("Q Factor / Dive engagement")
+st.title("Dive engagement / Q Factor")
 with st.expander("Description"):
     st.markdown(
         "In 1952, Dr. Henry V. Hempleman introduced the Q Factor as a way to quantify the overall decompression "
@@ -110,7 +110,7 @@ with st.container(border=True):
     )
 
 
-st.header("Engagement examples")
+st.header("Examples")
 table = pd.DataFrame(
     [
         {
@@ -130,7 +130,7 @@ st.dataframe(
     height=(len(table) + 1) * 35 + 3,
 )
 
-st.header("Engagement VS DCS Risk")
+st.header("DCS Risk")
 st.info(
     "When Engagment (Q) is multiplied by 1.3, the DCS risk is multiplied by 10. "
     "This means that a dive with Q=200 has a DCS risk of 1/100,000, while a dive with Q=260 (200*1.3) has a DCS risk of 1/10,000."
