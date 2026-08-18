@@ -47,6 +47,11 @@ nitrox_page = st.Page(
     title="Nitrox",
     icon=":material/bubble_chart:",
 )
+trimix_page = st.Page(
+    "tools/trimix.py",
+    title="Trimix",
+    icon=":material/alt_route:",
+)
 gas_planning_page = st.Page(
     "tools/planning.py",
     title="Gas planning",
@@ -70,7 +75,7 @@ statistics_page = st.Page(
 # pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
 pages = {
     "": [home_page],
-    "Tools": [rmv_page, nitrox_page, gas_planning_page, gas_blender_page],
+    "Tools": [rmv_page, nitrox_page, trimix_page, gas_planning_page, gas_blender_page],
 }
 if st.user.is_logged_in:
     pages["User"] = [preferences_page]
