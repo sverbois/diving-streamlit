@@ -72,10 +72,15 @@ statistics_page = st.Page(
     title="Statistics",
     icon=":material/bar_chart:",
 )
-# pages = [home_page, rmv_page, nitrox_page, gas_planning_page, gas_blender_page]
+qfactor_page = st.Page(
+    "tools/qfactor.py",
+    title="Q Factor / Dive engagement",
+    icon=":material/speed:",
+)
 pages = {
     "": [home_page],
     "Tools": [rmv_page, nitrox_page, trimix_page, gas_planning_page, gas_blender_page],
+    "Concepts": [qfactor_page],
 }
 if st.user.is_logged_in:
     pages["User"] = [preferences_page]
