@@ -11,9 +11,9 @@ def best_trimix(dive_depth, max_end_depth, max_ppo2):
     dive_pressure = dive_depth / 10.0 + 1.0
     max_ppn2 = (max_end_depth / 10.0 + 1.0) * 0.79
     # Get the highest O2 percentage possible
-    o2_percentage = min(100, int(max_ppo2 / dive_pressure * 100))
+    o2_percentage = min(100, round(max_ppo2 / dive_pressure * 100))
     # Get the highest N2 percentage possible in respect of the END
-    n2_percentage = min(79, 100 - o2_percentage, int(max_ppn2 / dive_pressure * 100))
+    n2_percentage = min(79, 100 - o2_percentage, round(max_ppn2 / dive_pressure * 100))
     # Helium is the remainder
     he_percentage = 100 - o2_percentage - n2_percentage
     return o2_percentage, he_percentage
@@ -52,7 +52,7 @@ with st.container(border=True):
     trimix_max_dive_depth = l1c3.slider(
         label="Max dive depth (in m)",
         min_value=40,
-        max_value=int((trimix_max_ppo2 / MIN_O2_IN_NORMOXIC_TRIMIX - 1.0) * 10),
+        max_value=round((trimix_max_ppo2 / MIN_O2_IN_NORMOXIC_TRIMIX - 1.0) * 10),
         value=45,
         step=1,
         key="trimix_max_dive_depth",

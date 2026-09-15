@@ -9,14 +9,14 @@ def compute_mod(ppo2_max, o2_percentage):
         return 0.0
     max_pressure_in_bar = ppo2_max / (o2_percentage / 100.0)
     mod_in_m = (max_pressure_in_bar - 1.0) * 10.0
-    return int(mod_in_m)
+    return round(mod_in_m)
 
 
 def best_mix(ppo2_max, depth):
     if not (ppo2_max and depth):
         return 0
     depth_in_bar = depth / 10.0 + 1.0
-    return min(100, int(ppo2_max / depth_in_bar * 100))
+    return min(100, round(ppo2_max / depth_in_bar * 100))
 
 
 def compute_ppo2(o2_percentage, nitrox_depth):
@@ -34,7 +34,7 @@ def equivalent_air_depth(o2_percentage, nitrox_depth):
     pabs = nitrox_depth / 10.0 + 1
     ppn2 = n2_percentage / 100.0 * pabs
     ead = (ppn2 / 0.79 - 1) * 10.0
-    return int(ead)
+    return round(ead)
 
 
 st.title("Nitrox")

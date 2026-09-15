@@ -157,7 +157,7 @@ fulldata["pressure"] = cylinder_pressure - (fulldata["consumption"].cumsum() / c
 fulldata["duration_display"] = fulldata["duration"].apply(math.ceil)
 # Masque la profondeur pour les segments de montée / descente dans l'affichage final
 fulldata["depth_display"] = fulldata.apply(
-    lambda r: "⬆️" if r["type"] == "ascent" else "⬇️" if r["type"] == "descent" else f"{int(r['depth'])} m",
+    lambda r: "⬆️" if r["type"] == "ascent" else "⬇️" if r["type"] == "descent" else f"{round(r['depth'])} m",
     axis=1,
 )
 
@@ -168,10 +168,10 @@ st.dataframe(
     column_config=COLUMN_CONFIG,
 )
 
-total_consumption_in_l = int(fulldata["consumption"].sum())
+total_consumption_in_l = round(fulldata["consumption"].sum())
 total_consumption_in_bar = total_consumption_in_l / cylinder_volume
-reserve_in_bar = int(cylinder_pressure - total_consumption_in_bar)
-total_time_in_min = int(fulldata["duration"].sum())
+reserve_in_bar = round(cylinder_pressure - total_consumption_in_bar)
+total_time_in_min = round(fulldata["duration"].sum())
 
 if reserve_in_bar < 50:
     st.markdown(
