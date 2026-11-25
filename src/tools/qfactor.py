@@ -74,7 +74,10 @@ with st.container(border=True):
     )
     qfactor_q = compute_q(qfactor_depth, qfactor_time)
     category = category_for_q(qfactor_q)
-    st.markdown(f"### :{ROW_COLORS[category]}[{category} dive]\n## Q = {qfactor_q:.1f}", text_alignment="center")
+    st.markdown(
+        f'### :color[{category} dive]{{foreground="{ROW_COLORS[category]}"}}\n## Q = {qfactor_q:.1f}',
+        text_alignment="center",
+    )
 
 
 st.header("Examples")
