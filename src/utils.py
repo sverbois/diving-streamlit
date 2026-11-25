@@ -129,9 +129,7 @@ def build_dive_profile(levels: pd.DataFrame, descent_speed, ascent_speed, stop_d
         rows.append(
             {"depth": depth, "duration": duration, "type": "deco" if is_last else "constant", "end_depth": depth}
         )
-        if is_last:
-            break
-        next_depth = stops[i + 1][0]
+        next_depth = 0 if is_last else stops[i + 1][0]
         diff_depth = next_depth - depth
         rows.append(
             {
@@ -141,8 +139,6 @@ def build_dive_profile(levels: pd.DataFrame, descent_speed, ascent_speed, stop_d
                 "end_depth": next_depth,
             }
         )
-    # The final ascent is counted at surface pressure, unlike the other ascents counted at their mean depth.
-    rows.append({"depth": 0, "duration": stop_depth / ascent_speed, "type": "ascent", "end_depth": 0})
     return pd.DataFrame(rows)
 
 

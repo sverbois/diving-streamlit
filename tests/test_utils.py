@@ -116,9 +116,9 @@ def test_dive_plan():
     plan = utils.add_gas_consumption(profile, rmv=20, cylinder_volume=15, cylinder_pressure=200)
 
     assert list(plan["type"]) == ["constant", "descent", "constant", "ascent", "constant", "ascent", "deco", "ascent"]
-    assert list(plan["depth"]) == pytest.approx([0, 20, 40, 30, 20, 13, 6, 0])
+    assert list(plan["depth"]) == pytest.approx([0, 20, 40, 30, 20, 13, 6, 3])
     assert list(plan["end_depth"]) == pytest.approx([0, 40, 40, 20, 20, 6, 6, 0])
     assert list(plan["duration"]) == pytest.approx([0, 2, 5, 2, 10, 1.4, 5, 0.6])
-    assert list(plan["consumption"]) == pytest.approx([0, 120, 500, 160, 600, 64.4, 160, 12])
+    assert list(plan["consumption"]) == pytest.approx([0, 120, 500, 160, 600, 64.4, 160, 15.6])
     assert list(plan["runtime"]) == pytest.approx([0, 2, 7, 9, 19, 20.4, 25.4, 26])
-    assert list(plan["pressure"]) == pytest.approx([200, 192, 158.6666667, 148, 108, 103.7066667, 93.04, 92.24])
+    assert list(plan["pressure"]) == pytest.approx([200, 192, 158.6666667, 148, 108, 103.7066667, 93.04, 92])
