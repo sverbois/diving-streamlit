@@ -27,7 +27,7 @@ home_page = st.Page(
 rmv_page = st.Page(
     "tools/rmv.py",
     title="RMV",
-    icon=":material/air:",
+    icon=":material/pulmonology:",
 )
 nitrox_page = st.Page(
     "tools/nitrox.py",
