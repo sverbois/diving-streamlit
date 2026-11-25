@@ -13,7 +13,7 @@ with st.expander("Description"):
         "**Nitrox** is an oxygen-enriched mixture. It contains as little as 40% oxygen for a bottom gas and up to 100% for a decompression gas."
     )
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Maximum operating depth (MOD)</h3>", unsafe_allow_html=True)
+    st.subheader("Maximum operating depth (MOD)", text_alignment="center")
     l1c1, l1c2 = st.columns(2)
     mod_ppo2_max = l1c1.selectbox(
         label="PPO2 max (in bar)",
@@ -30,13 +30,10 @@ with st.container(border=True):
         step=1,
         key="mod_o2_max",
     )
-    st.markdown(
-        f"<h2 class='center'>{compute_mod(mod_ppo2_max, mod_o2_max)} m</h2>",
-        unsafe_allow_html=True,
-    )
+    st.markdown(f"## {compute_mod(mod_ppo2_max, mod_o2_max)} m", text_alignment="center")
 
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Best Nitrox</h3>", unsafe_allow_html=True)
+    st.subheader("Best Nitrox", text_alignment="center")
     l2c1, l2c2 = st.columns(2)
     best_ppo2_max = l2c1.selectbox(
         label="PPO2 max (in bar)",
@@ -53,7 +50,7 @@ with st.container(border=True):
         step=1,
         key="best_max_depth",
     )
-    st.markdown(f"<h2 class='center'>{best_mix(best_ppo2_max, best_max_depth)} % O2</h2>", unsafe_allow_html=True)
+    st.markdown(f"## {best_mix(best_ppo2_max, best_max_depth)} % O2", text_alignment="center")
 
 with st.container(border=True):
     l3c1, l3c2 = st.columns(2)
@@ -73,7 +70,7 @@ with st.container(border=True):
         step=1,
         key="depth",
     )
-    st.markdown("<h3 class='center pb-0'>Partial pressure O2 (PPO2)</h3>", unsafe_allow_html=True)
-    st.markdown(f"<h2 class='center pt-0'>{compute_ppo2(o2percentage, depth)} bar</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 class='center pb-0'>Equivalent air depth (EAD)</h3>", unsafe_allow_html=True)
-    st.markdown(f"<h2 class='center pt-0'>{equivalent_air_depth(o2percentage, depth)} m</h2>", unsafe_allow_html=True)
+    st.markdown(f"### Partial pressure O2 (PPO2)\n## {compute_ppo2(o2percentage, depth)} bar", text_alignment="center")
+    st.markdown(
+        f"### Equivalent air depth (EAD)\n## {equivalent_air_depth(o2percentage, depth)} m", text_alignment="center"
+    )

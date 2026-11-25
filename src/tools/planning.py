@@ -116,10 +116,7 @@ reserve_in_bar = round(cylinder_pressure - total_consumption_in_bar)
 total_time_in_min = round(fulldata["duration"].sum())
 
 if reserve_in_bar < 50:
-    st.markdown(
-        "<div class='center danger'><h3>DANGER !</h3><h5>Your reserve is insufficient !</h5></div>",
-        unsafe_allow_html=True,
-    )
+    st.error("Your reserve is insufficient!", title="Danger")
 with st.container(horizontal=True):
     st.metric(
         label="Total time (min)",

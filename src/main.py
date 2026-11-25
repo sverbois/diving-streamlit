@@ -20,13 +20,6 @@ st.logo(
 
 streamlit_style = """
 <style>
-  .st-key-user_actions p {font-size: 1.2rem !important;}
-  .center {text-align: center;}
-  .pt-0 {padding-top: 0px !important;}
-  .mt-0 {margin-top: 0px !important;}
-  .pb-0 {padding-bottom: 0px !important;}
-  .mb-0 {margin-bottom: 0px !important;}
-  .danger {color: red !important; border: 2px solid red; padding: 0.5rem; margin: 1rem 0rem;}
   div.stMainBlockContainer {padding-top: 2rem !important;}
   hr {margin: 0px !important;}
 </style>

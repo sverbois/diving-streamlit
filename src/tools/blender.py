@@ -153,7 +153,4 @@ with st.container(border=True):
         else:
             st.metric("He", "0.00 €", help="No helium added")
     st.divider()
-    st.markdown(
-        f"<h2 class='center'>Total: {total_cost:.2f} €</h2>",
-        unsafe_allow_html=True,
-    )
+    st.markdown(f"## Total: {total_cost:.2f} €", text_alignment="center")

@@ -54,4 +54,4 @@ mean_depth = right.number_input(
 )
 st.divider()
 rmv = compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth)
-st.markdown(f"<h3 class='center'>Your RMV is {rmv:.1f} L/min</h3>", unsafe_allow_html=True)
+st.subheader(f"Your RMV is {rmv:.1f} L/min", text_alignment="center")

@@ -73,11 +73,8 @@ with st.container(border=True):
         key="qfactor_time",
     )
     qfactor_q = compute_q(qfactor_depth, qfactor_time)
-    st.markdown(
-        f"<div class='center'><h3 class='center' style='color: {ROW_COLORS[category_for_q(qfactor_q)]}'>{category_for_q(qfactor_q)} Dive</h3>"
-        f"<h2>Q = {qfactor_q:.1f}</h2></div>",
-        unsafe_allow_html=True,
-    )
+    category = category_for_q(qfactor_q)
+    st.markdown(f"### :{ROW_COLORS[category]}[{category} dive]\n## Q = {qfactor_q:.1f}", text_alignment="center")
 
 
 st.header("Examples")

@@ -21,7 +21,7 @@ with st.expander("Description"):
         "We use a minimal amount of oxygen of 20% to ensure normoxia and a maximum END depth of 30 m for nitrogen narcosis."
     )
 with st.container(border=True):
-    st.markdown("<h3 class='center'>Best Normoxic Trimix</h3>", unsafe_allow_html=True)
+    st.subheader("Best normoxic trimix", text_alignment="center")
     l1c1, l1c2, l1c3 = st.columns(3)
     trimix_max_ppo2 = l1c1.selectbox(
         label="PPO2 max (in bar)",
@@ -47,6 +47,6 @@ with st.container(border=True):
     o2_percentage, he_percentage = best_trimix(trimix_max_dive_depth, trimix_max_end_depth, trimix_max_ppo2)
     n2_percentage = 100 - o2_percentage - he_percentage
     st.markdown(
-        f"<div class='center'><h2>Tx {o2_percentage}/{he_percentage}</h2><h4>{o2_percentage}% O2 - {he_percentage}% He - {n2_percentage}% N2</h4></div>",
-        unsafe_allow_html=True,
+        f"## Tx {o2_percentage}/{he_percentage}\n#### {o2_percentage}% O2 - {he_percentage}% He - {n2_percentage}% N2",
+        text_alignment="center",
     )
