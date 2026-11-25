@@ -7,6 +7,12 @@ from config import PPO2_VALUES
 from utils import best_trimix
 from utils import max_normoxic_depth
 
+MIN_DIVE_DEPTH = 40  # m, lower bound of the depth slider
+# A lower PPO2 would need less than 20% O2 on the whole slider range.
+NORMOXIC_PPO2_VALUES = [
+    ppo2 for ppo2 in PPO2_VALUES if max_normoxic_depth(ppo2, MIN_O2_IN_NORMOXIC_TRIMIX) > MIN_DIVE_DEPTH
+]
+
 st.title("Trimix")
 with st.expander("Description"):
     st.markdown(
@@ -19,8 +25,8 @@ with st.container(border=True):
     l1c1, l1c2, l1c3 = st.columns(3)
     trimix_max_ppo2 = l1c1.selectbox(
         label="PPO2 max (in bar)",
-        options=PPO2_VALUES,
-        index=DEFAULT_PPO2_INDEX,
+        options=NORMOXIC_PPO2_VALUES,
+        index=NORMOXIC_PPO2_VALUES.index(PPO2_VALUES[DEFAULT_PPO2_INDEX]),
         format_func=lambda x: f"{x} bar",
         key="trimix_max_ppo2",
     )
@@ -32,7 +38,7 @@ with st.container(border=True):
     )
     trimix_max_dive_depth = l1c3.slider(
         label="Max dive depth (in m)",
-        min_value=40,
+        min_value=MIN_DIVE_DEPTH,
         max_value=max_normoxic_depth(trimix_max_ppo2, MIN_O2_IN_NORMOXIC_TRIMIX),
         value=45,
         step=1,
