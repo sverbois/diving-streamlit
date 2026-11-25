@@ -2,7 +2,6 @@ import json
 
 import streamlit as st
 from pydantic import BaseModel
-from pydantic import Field
 from sqlalchemy import text
 
 USER_TABLE_NAME = "diving_users"
@@ -15,8 +14,8 @@ class UserDataModel(BaseModel):
     #     description="Courriel",
     #     readOnly=True,
     # )
-    rmv: int = Field(default=20, title="RMV in L/min")
-    descent_speed: int = Field(default=20, title="Descent speed in m/min")
+    rmv: int = 20
+    descent_speed: int = 20
 
 
 def initialize_db():

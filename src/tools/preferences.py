@@ -1,6 +1,6 @@
 import streamlit as st
-import streamlit_pydantic as sp
 
+from db import UserDataModel
 from db import save_user
 from utils import get_user_data
 
@@ -14,10 +14,13 @@ st.header(st.user.name)
 profile1, profile2 = st.tabs(["Diving preferences", "Blender prices"])
 
 with profile1:
-    data = sp.pydantic_form(key="user_form", model=USER_DATA, submit_label="Save my profile")
-    if data:
-        save_user(data)
-        st.toast("Profile saved successfully!", icon="✅")
+    with st.form("user_form"):
+        rmv = st.number_input("RMV in L/min", min_value=1, value=USER_DATA.rmv)
+        descent_speed = st.number_input("Descent speed in m/min", min_value=1, value=USER_DATA.descent_speed)
+        submitted = st.form_submit_button("Save my profile", icon=":material/save:")
+    if submitted:
+        save_user(UserDataModel(rmv=rmv, descent_speed=descent_speed))
+        st.toast("Profile saved successfully!", icon=":material/check_circle:")
 
 with profile2:
     st.write("TODO")
