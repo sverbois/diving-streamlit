@@ -18,14 +18,6 @@ st.logo(
     size="large",
 )
 
-streamlit_style = """
-<style>
-  div.stMainBlockContainer {padding-top: 2rem !important;}
-  hr {margin: 0px !important;}
-</style>
-"""
-st.html(streamlit_style)
-
 # Icon names: https://fonts.google.com/icons?icon.set=Material+Icons
 home_page = st.Page(
     "tools/home.py",
