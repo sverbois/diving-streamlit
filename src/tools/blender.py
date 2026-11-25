@@ -85,6 +85,10 @@ with st.container(border=True, horizontal=True):
         step=1,
     )
 
+if start_o2 + start_he > 100 or end_o2 + end_he > 100:
+    st.error("O2 and He cannot add up to more than 100% of a mix.")
+    st.stop()
+
 missing = get_missing_gases(
     cylinder_volume=cylinder_volume,
     start_pressure=start_pressure,
@@ -94,6 +98,10 @@ missing = get_missing_gases(
     start_o2_percentage=start_o2,
     end_o2_percentage=end_o2,
 )
+if any(round(volume) < 0 for volume in missing.values()):
+    st.error("This mix cannot be reached by only adding gas: the cylinder must be partly emptied first.")
+    st.stop()
+
 st.subheader("Gases to add")
 for column, order in zip(st.columns(2, border=True), (("o2", "he", "air"), ("he", "o2", "air"))):
     with column:
