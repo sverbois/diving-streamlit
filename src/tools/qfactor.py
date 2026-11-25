@@ -1,6 +1,10 @@
 import pandas as pd
 import streamlit as st
 
+from utils import category_for_q
+from utils import compute_q
+from utils import dci_risq_for_q
+
 EXAMPLE_TIME = 25  # min, used to derive an example depth for each category below
 
 CATEGORIES = [
@@ -18,20 +22,6 @@ CATEGORIES = [
 ]
 
 
-def compute_q(depth, time):
-    return depth * (time**0.5)
-
-
-def category_for_q(q):
-    if q < 200:
-        return "Recreational"
-    if q < 350:
-        return "Sport"
-    if q < 500:
-        return "Technical"
-    return "Expedition"
-
-
 ROW_COLORS = {
     "Recreational": "green",
     "Sport": "blue",
@@ -43,26 +33,6 @@ ROW_COLORS = {
 def highlight_row(row):
     color = ROW_COLORS[row["Dive type"]]
     return [f"color: {color}"] * len(row)
-
-
-def dci_risq_for_q(q):
-    if q <= 100:
-        return "1/1,000,000"
-    if q <= 200:
-        return "1/100,000"
-    if q <= 300:
-        return "1/10,000"
-    if q <= 400:
-        return "1/1,000"
-    if q <= 450:
-        return "2/100"
-    if q <= 500:
-        return "4/100"
-    if q <= 550:
-        return "6/100"
-    if q <= 600:
-        return "10/100"
-    return "??/100"
 
 
 st.title("Dive engagement / Q Factor")

@@ -1,15 +1,8 @@
 import streamlit as st
 
-from utils import CYLINDER_VOLUMES
-from utils import DEFAULT_CYLINDER_VOLUME_INDEX
-
-
-def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth):
-    if not (cylinder_volume and start_pressure and end_pressure and dive_time and mean_depth):
-        return 0.0
-    pressure = mean_depth / 10.0 + 1.0
-    return (cylinder_volume * (start_pressure - end_pressure)) / (dive_time * pressure)
-
+from config import CYLINDER_VOLUMES
+from config import DEFAULT_CYLINDER_VOLUME_INDEX
+from utils import compute_rmv
 
 st.title("RMV")
 with st.expander("Description"):

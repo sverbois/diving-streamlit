@@ -1,8 +1,13 @@
 import streamlit as st
 
-from utils import CYLINDER_VOLUMES
-from utils import DEFAULT_CYLINDER_VOLUME_INDEX
-from utils import get_missing_gases_pressures
+from config import AIR_PRICES
+from config import CYLINDER_VOLUMES
+from config import DEFAULT_CYLINDER_VOLUME_INDEX
+from config import HE_PRICE
+from config import MIX_PRICE
+from config import O2_PRICE
+from utils import filling_base_cost
+from utils import get_missing_gases
 
 # CSS pour styliser les labels des métriques
 st.html(
@@ -79,7 +84,7 @@ with st.container(border=True, horizontal=True):
         step=1,
     )
 
-missing = get_missing_gases_pressures(
+missing = get_missing_gases(
     cylinder_volume=cylinder_volume,
     start_pressure=start_pressure,
     end_pressure=end_pressure,
@@ -145,25 +150,10 @@ with g2:
         )
 
 st.subheader("Cost of the mix")
-mix_price = 3.0
-o2_price = 0.025
-he_price = 0.08
-air_price = {
-    3: 3.0,
-    15: 6.0,
-    24: 8.0,
-}
-
 gas_number = sum(1 for value in missing.values() if value > 0)
-if gas_number > 1:
-    base_cost = 3.0  # Base price for mixing more than one gas
-else:
-    for volume, price in air_price.items():
-        if cylinder_volume <= volume:
-            base_cost = price
-            break
-o2_cost = missing["o2"] * o2_price
-he_cost = missing["he"] * he_price
+base_cost = filling_base_cost(missing, cylinder_volume, MIX_PRICE, AIR_PRICES)
+o2_cost = missing["o2"] * O2_PRICE
+he_cost = missing["he"] * HE_PRICE
 total_cost = base_cost + o2_cost + he_cost
 
 with st.container(border=True):
@@ -178,7 +168,7 @@ with st.container(border=True):
             st.metric(
                 "O₂",
                 f"{o2_cost:.2f} €",
-                delta=f"{missing['o2']:.0f} L × {o2_price:.3f} €/L",
+                delta=f"{missing['o2']:.0f} L × {O2_PRICE:.3f} €/L",
                 help="Cost of added oxygen",
             )
         else:
@@ -188,7 +178,7 @@ with st.container(border=True):
             st.metric(
                 "He",
                 f"{he_cost:.2f} €",
-                delta=f"{missing['he']:.0f} L × {he_price:.3f} €/L",
+                delta=f"{missing['he']:.0f} L × {HE_PRICE:.3f} €/L",
                 help="Cost of added helium",
             )
         else:

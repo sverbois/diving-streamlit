@@ -17,6 +17,10 @@ clean:
 config:
     uv run streamlit config show
 
+# Run the tests
+test:
+    uv run --group dev pytest
+
 # Check lint and format without changing files
 lint:
     uv run ruff check

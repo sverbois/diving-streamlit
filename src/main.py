@@ -1,5 +1,6 @@
 import streamlit as st
 
+from config import ADMIN_EMAIL
 from db import UserPreferences
 from db import initialize_db
 from db import record_visit
@@ -86,7 +87,7 @@ pages = {
 }
 if st.user.is_logged_in:
     pages["User"] = [preferences_page]
-    if st.user.email == "sebastien.verbois@gmail.com":
+    if st.user.email == ADMIN_EMAIL:
         pages["User"].append(statistics_page)
 
 if "preferences" not in st.session_state:

@@ -4,13 +4,16 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from utils import CYLINDER_VOLUMES
-from utils import DEFAULT_CYLINDER_VOLUME_INDEX
+from config import ASCENT_SPEED
+from config import CYLINDER_VOLUMES
+from config import DECO_DEPTH
+from config import DEFAULT_CYLINDER_VOLUME_INDEX
+from config import SAFETY_STOP_DURATION
+from utils import add_gas_consumption
+from utils import build_dive_profile
 
 PREFERENCES = st.session_state["preferences"]
 
-DECO_DEPTH = 6  # m
-SAFETY_STOP_DURATION = 5  # min
 COLUMN_CONFIG = {
     "icon": st.column_config.TextColumn(
         "",
@@ -98,60 +101,15 @@ with st.container(border=True):
     )
     decompression_time = col2.slider("Decompression time (min)", min_value=0, max_value=20, value=0, step=1)
 
-ASCENT_SPEED = 10  # m/min
-DESCENT_SPEED = descent_speed  # m/min
-
-
-def add_ascent_and_descent_data(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.reset_index(drop=True)  # Reset index to ensure proper iteration
-    df.loc[len(df)] = {"depth": DECO_DEPTH, "duration": SAFETY_STOP_DURATION + decompression_time}
-    first = pd.DataFrame([{"depth": 0, "duration": 0}])
-    df = pd.concat([first, df], ignore_index=True)
-    rows: list[dict] = []
-    for i in range(len(df)):
-        level = df.iloc[i]
-        # Ajoute le niveau
-        rows.append(
-            {
-                "depth": level["depth"],
-                "duration": level["duration"],
-                "type": "constant" if i < len(df) - 1 else "deco",
-            }
-        )
-        # Insère la descente / remontée
-        if i < len(df) - 1:
-            next_depth = df.iloc[i + 1]["depth"]
-            avg_depth = (level["depth"] + next_depth) / 2
-            diff_depth = next_depth - level["depth"]
-            rows.append(
-                {
-                    "depth": avg_depth,
-                    "duration": diff_depth / DESCENT_SPEED if diff_depth > 0 else abs(diff_depth) / ASCENT_SPEED,
-                    "type": "descent" if diff_depth > 0 else "ascent",
-                }
-            )
-            rows[0]["type"] = "start"
-        if rows[-1]["type"] == "deco":
-            rows.append(
-                {
-                    "depth": 0,
-                    "duration": rows[-1]["depth"] / ASCENT_SPEED,
-                    "type": "ascent",
-                }
-            )
-    return pd.DataFrame(rows)
-
-
-# Nouveau DataFrame avec profondeurs de descente/remontée
-fulldata = add_ascent_and_descent_data(
+profile = build_dive_profile(
     data,
+    descent_speed=descent_speed,
+    ascent_speed=ASCENT_SPEED,
+    stop_depth=DECO_DEPTH,
+    stop_duration=SAFETY_STOP_DURATION + decompression_time,
 )
-
-pressures = 1 + fulldata["depth"] / 10
-fulldata["consumption"] = pressures * rmv * fulldata["duration"]
+fulldata = add_gas_consumption(profile, rmv=rmv, cylinder_volume=cylinder_volume, cylinder_pressure=cylinder_pressure)
 fulldata["icon"] = fulldata["type"].map(ICONS)
-fulldata["runtime"] = fulldata["duration"].cumsum()
-fulldata["pressure"] = cylinder_pressure - (fulldata["consumption"].cumsum() / cylinder_volume)
 # Arrondir les durées à l'entier supérieur pour l'affichage
 fulldata["duration_display"] = fulldata["duration"].apply(math.ceil)
 # Masque la profondeur pour les segments de montée / descente dans l'affichage final
@@ -194,18 +152,12 @@ with st.container(horizontal=True):
         border=True,
     )
 
-partialdata = fulldata[["depth", "runtime", "type"]]
-for i in range(len(partialdata)):
-    # Si ce n'est pas la dernière ligne, utilise la profondeur de la ligne suivante
-    if partialdata.iloc[i]["type"] in ["ascent", "descent"] and i + 1 < len(partialdata):
-        partialdata.iloc[i, partialdata.columns.get_loc("depth")] = partialdata.iloc[i + 1]["depth"]
-
 fig = px.line(
-    partialdata,
+    fulldata,
     x="runtime",
-    y="depth",
+    y="end_depth",
     # title="Diving profile",
-    labels={"runtime": "Runtime (min)", "depth": "Depth (m)"},
+    labels={"runtime": "Runtime (min)", "end_depth": "Depth (m)"},
 )
 fig.update_yaxes(autorange="reversed")
 

@@ -1,31 +1,11 @@
-from math import ceil
-
 import streamlit as st
 
-from utils import DEFAULT_PPO2_INDEX
-from utils import END_DEPTHS
-from utils import MIN_O2_IN_NORMOXIC_TRIMIX
-from utils import PPO2_VALUES
-
-
-def best_trimix(dive_depth, max_end_depth, max_ppo2):
-    dive_pressure = dive_depth / 10.0 + 1.0
-    max_ppn2 = (max_end_depth / 10.0 + 1.0) * 0.79
-    # Get the highest O2 percentage possible
-    o2_percentage = min(100, round(max_ppo2 / dive_pressure * 100))
-    # Get the highest N2 percentage possible in respect of the END
-    n2_percentage = min(79, 100 - o2_percentage, round(max_ppn2 / dive_pressure * 100))
-    # Helium is the remainder
-    he_percentage = 100 - o2_percentage - n2_percentage
-    return o2_percentage, he_percentage
-
-
-def end_depth(n2_percentage, dive_depth):
-    dive_pressure = dive_depth / 10.0 + 1.0
-    ppn2 = n2_percentage / 100.0 * dive_pressure
-    ead = (ppn2 / 0.79 - 1) * 10.0
-    return ceil(ead)
-
+from config import DEFAULT_PPO2_INDEX
+from config import END_DEPTHS
+from config import MIN_O2_IN_NORMOXIC_TRIMIX
+from config import PPO2_VALUES
+from utils import best_trimix
+from utils import max_normoxic_depth
 
 st.title("Trimix")
 with st.expander("Description"):
@@ -53,7 +33,7 @@ with st.container(border=True):
     trimix_max_dive_depth = l1c3.slider(
         label="Max dive depth (in m)",
         min_value=40,
-        max_value=round((trimix_max_ppo2 / MIN_O2_IN_NORMOXIC_TRIMIX - 1.0) * 10),
+        max_value=max_normoxic_depth(trimix_max_ppo2, MIN_O2_IN_NORMOXIC_TRIMIX),
         value=45,
         step=1,
         key="trimix_max_dive_depth",
@@ -64,8 +44,3 @@ with st.container(border=True):
         f"<div class='center'><h2>Tx {o2_percentage}/{he_percentage}</h2><h4>{o2_percentage}% O2 - {he_percentage}% He - {n2_percentage}% N2</h4></div>",
         unsafe_allow_html=True,
     )
-    st.markdown(
-        "",
-        unsafe_allow_html=True,
-    )
-    end_depth_value = end_depth(n2_percentage, trimix_max_dive_depth)

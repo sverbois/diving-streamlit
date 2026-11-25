@@ -1,41 +1,11 @@
 import streamlit as st
 
-from utils import DEFAULT_PPO2_INDEX
-from utils import PPO2_VALUES
-
-
-def compute_mod(ppo2_max, o2_percentage):
-    if not (ppo2_max and o2_percentage):
-        return 0.0
-    max_pressure_in_bar = ppo2_max / (o2_percentage / 100.0)
-    mod_in_m = (max_pressure_in_bar - 1.0) * 10.0
-    return round(mod_in_m)
-
-
-def best_mix(ppo2_max, depth):
-    if not (ppo2_max and depth):
-        return 0
-    depth_in_bar = depth / 10.0 + 1.0
-    return min(100, round(ppo2_max / depth_in_bar * 100))
-
-
-def compute_ppo2(o2_percentage, nitrox_depth):
-    if not (o2_percentage and nitrox_depth):
-        return 0.0
-    pabs = nitrox_depth / 10.0 + 1
-    ppo2 = o2_percentage / 100.0 * pabs
-    return round(ppo2, 2)
-
-
-def equivalent_air_depth(o2_percentage, nitrox_depth):
-    if not (o2_percentage and nitrox_depth):
-        return 0.0
-    n2_percentage = 100 - o2_percentage
-    pabs = nitrox_depth / 10.0 + 1
-    ppn2 = n2_percentage / 100.0 * pabs
-    ead = (ppn2 / 0.79 - 1) * 10.0
-    return round(ead)
-
+from config import DEFAULT_PPO2_INDEX
+from config import PPO2_VALUES
+from utils import best_mix
+from utils import compute_mod
+from utils import compute_ppo2
+from utils import equivalent_air_depth
 
 st.title("Nitrox")
 with st.expander("Description"):
