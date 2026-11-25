@@ -16,7 +16,7 @@ def get_user_data():
         if st.user.is_logged_in:  # authenticated user
             user = get_user(st.user.email)
             if user:  # existing user
-                user_data = UserDataModel.parse_obj(user.data)
+                user_data = UserDataModel.model_validate(user.data)
             else:  # new user
                 user_data = UserDataModel(name=st.user.name, email=st.user.email)
         else:  # anonymous user

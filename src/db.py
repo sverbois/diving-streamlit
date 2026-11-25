@@ -67,7 +67,7 @@ def save_user(user_data):
                 ),
                 {
                     "email": st.user.email,
-                    "data": json.dumps(user_data.dict()),
+                    "data": json.dumps(user_data.model_dump()),
                 },
             )
             s.commit()
