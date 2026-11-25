@@ -6,6 +6,10 @@ help:
 start:
 	uv run --group dev streamlit run src/main.py
 
+.PHONY: skills  # Install Streamlit agent skills for Claude Code
+skills:
+	uv run streamlit skills --yes
+
 .PHONY: clean  # Clean development environment
 clean:
 	rm -rf .venv
