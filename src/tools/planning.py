@@ -1,7 +1,7 @@
 import math
 
+import altair as alt
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
 from config import ASCENT_SPEED
@@ -108,6 +108,7 @@ st.dataframe(
     hide_index=True,
     column_order=["depth_display", "duration_display", "consumption", "runtime", "pressure"],
     column_config=COLUMN_CONFIG,
+    alt="Dive plan by segment",
 )
 
 total_consumption_in_l = round(fulldata["consumption"].sum())
@@ -134,16 +135,12 @@ with st.container(horizontal=True):
         border=True,
     )
 
-fig = px.line(
-    fulldata,
-    x="runtime",
-    y="end_depth",
-    labels={"runtime": "Runtime (min)", "end_depth": "Depth (m)"},
+profile_chart = (
+    alt.Chart(fulldata)
+    .mark_line()
+    .encode(
+        x=alt.X("runtime", title="Runtime (min)"),
+        y=alt.Y("end_depth", title="Depth (m)", scale=alt.Scale(reverse=True)),
+    )
 )
-fig.update_yaxes(autorange="reversed")
-
-plotly_config = {
-    "displaylogo": False,
-    "modeBarButtonsToRemove": ["zoom", "zoomin", "zoomout", "autoscale", "resetscale", "pan"],
-}
-st.plotly_chart(fig, width="stretch", config=plotly_config)
+st.altair_chart(profile_chart, alt="Dive profile: depth over runtime")

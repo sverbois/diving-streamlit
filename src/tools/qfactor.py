@@ -94,7 +94,8 @@ st.dataframe(
     table.style.apply(highlight_row, axis=1),
     hide_index=True,
     width="content",
-    height=(len(table) + 1) * 35 + 3,
+    height="content",
+    alt="Example dives by engagement",
 )
 
 st.header("DCS Risk")

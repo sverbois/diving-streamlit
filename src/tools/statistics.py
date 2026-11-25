@@ -5,4 +5,4 @@ from db import get_users
 st.title("Statistics")
 
 st.subheader("Users in database")
-st.dataframe(get_users())
+st.dataframe(get_users(), alt="Users in database")
