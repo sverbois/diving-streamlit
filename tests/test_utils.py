@@ -7,6 +7,26 @@ AIR_PRICES = {3: 3.0, 15: 6.0, 24: 8.0}
 
 
 @pytest.mark.parametrize(
+    ("volume", "moles", "temperature", "expected"),
+    [(15, 123.1, 293.15, 200.0), (12, 98.5, 293.15, 200.0), (15, 123.1, 323.15, 220.47), (15, 123.1, 268.15, 182.94)],
+)
+def test_ideal_gas_pressure(volume, moles, temperature, expected):
+    assert utils.ideal_gas_pressure(volume, moles, temperature) == pytest.approx(expected, abs=0.1)
+
+
+@pytest.mark.parametrize(("surface_volume", "moles"), [(3000, 123.08), (2400, 98.47), (0, 0.0)])
+def test_moles_and_surface_volume(surface_volume, moles):
+    assert utils.moles_in(surface_volume) == pytest.approx(moles, abs=0.01)
+    assert utils.surface_volume_of(moles) == pytest.approx(surface_volume, abs=0.5)
+
+
+@pytest.mark.parametrize(("celsius", "kelvin"), [(20, 293.15), (-5, 268.15), (0, 273.15)])
+def test_kelvin_and_celsius(celsius, kelvin):
+    assert utils.kelvin(celsius) == pytest.approx(kelvin)
+    assert utils.celsius(kelvin) == pytest.approx(celsius)
+
+
+@pytest.mark.parametrize(
     ("args", "expected"),
     [((15, 200, 50, 45, 15.0), 20.0), ((12, 230, 60, 38, 22.5), 16.518218623481783)],
 )

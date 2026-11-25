@@ -2,6 +2,11 @@ import pandas as pd
 
 N2_IN_AIR = 0.79
 METERS_PER_BAR = 10.0
+GAS_CONSTANT = 0.08314  # L·bar/(mol·K)
+ZERO_CELSIUS = 273.15  # K
+# Divers count gas as cylinder volume × pressure, so gas litres are taken at 1 bar and 20 °C.
+SURFACE_PRESSURE = 1.0  # bar
+SURFACE_TEMPERATURE = 20.0  # °C
 
 
 def pressure_at(depth):
@@ -10,6 +15,26 @@ def pressure_at(depth):
 
 def depth_at(pressure):
     return (pressure - 1.0) * METERS_PER_BAR
+
+
+def kelvin(celsius):
+    return celsius + ZERO_CELSIUS
+
+
+def celsius(kelvin):
+    return kelvin - ZERO_CELSIUS
+
+
+def moles_in(surface_volume):
+    return SURFACE_PRESSURE * surface_volume / (GAS_CONSTANT * kelvin(SURFACE_TEMPERATURE))
+
+
+def surface_volume_of(moles):
+    return moles * GAS_CONSTANT * kelvin(SURFACE_TEMPERATURE) / SURFACE_PRESSURE
+
+
+def ideal_gas_pressure(volume, moles, temperature):
+    return moles * GAS_CONSTANT * temperature / volume
 
 
 def compute_rmv(cylinder_volume, start_pressure, end_pressure, dive_time, mean_depth):
