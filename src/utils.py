@@ -97,7 +97,7 @@ def category_for_q(q):
     return "Expedition"
 
 
-def dci_risq_for_q(q):
+def dcs_risk_for_q(q):
     if q <= 100:
         return "1/1,000,000"
     if q <= 200:

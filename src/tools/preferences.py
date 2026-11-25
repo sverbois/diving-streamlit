@@ -7,7 +7,7 @@ PREFERENCES = st.session_state["preferences"]
 
 st.title("Preferences")
 with st.expander("Description"):
-    st.markdown("This page allow you to set preferences that will be used as default values in the different tools.")
+    st.markdown("This page allows you to set preferences that will be used as default values in the different tools.")
 st.header(st.user.name)
 
 profile1, profile2 = st.tabs(["Diving preferences", "Blender prices"])

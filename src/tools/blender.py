@@ -9,7 +9,6 @@ from config import O2_PRICE
 from utils import filling_base_cost
 from utils import get_missing_gases
 
-# CSS pour styliser les labels des métriques
 st.html(
     """
 <style>
@@ -21,6 +20,8 @@ st.html(
 </style>
 """
 )
+
+GAS_LABELS = {"o2": "O2", "he": "He", "air": "Air"}
 
 st.title("Gas blender")
 
@@ -93,61 +94,21 @@ missing = get_missing_gases(
     start_o2_percentage=start_o2,
     end_o2_percentage=end_o2,
 )
-ps = {
-    "start": start_pressure,
-    "o2": missing["o2"] / cylinder_volume,
-    "he": missing["he"] / cylinder_volume,
-    "air": missing["air"] / cylinder_volume,
-}
-
 st.subheader("Gases to add")
-g1, g2 = st.columns(2, border=True)
-with g1:
-    st.markdown("#### O2 → He → Air")
-    if ps["o2"] > 0:
-        st.metric(
-            "O2",
-            f"{ps['start']:.0f} bar → {ps['start'] + ps['o2']:.0f} bar",
-            delta=f"+ {round(missing['o2'])} L",
-            border=True,
-        )
-    if ps["he"] > 0:
-        st.metric(
-            "He",
-            f"{ps['start'] + ps['o2']:.0f} bar → {ps['start'] + ps['o2'] + ps['he']:.0f} bar",
-            delta=f"+ {round(missing['he'])} L",
-            border=True,
-        )
-    if ps["air"] > 0:
-        st.metric(
-            "Air",
-            f"{ps['start'] + ps['o2'] + ps['he']:.0f} bar → {ps['start'] + ps['o2'] + ps['he'] + ps['air']:.0f} bar",
-            delta=f"+ {round(missing['air'])} L",
-            border=True,
-        )
-with g2:
-    st.markdown("#### He → O2 → Air")
-    if ps["he"] > 0:
-        st.metric(
-            "He",
-            f"{ps['start']:.0f} bar → {ps['start'] + ps['he']:.0f} bar",
-            delta=f"+ {round(missing['he'])} L",
-            border=True,
-        )
-    if ps["o2"] > 0:
-        st.metric(
-            "O2",
-            f"{ps['start'] + ps['he']:.0f} bar → {ps['start'] + ps['he'] + ps['o2']:.0f} bar",
-            delta=f"+ {round(missing['o2'])} L",
-            border=True,
-        )
-    if ps["air"] > 0:
-        st.metric(
-            "Air",
-            f"{ps['start'] + ps['he'] + ps['o2']:.0f} bar → {ps['start'] + ps['he'] + ps['o2'] + ps['air']:.0f} bar",
-            delta=f"+ {round(missing['air'])} L",
-            border=True,
-        )
+for column, order in zip(st.columns(2, border=True), (("o2", "he", "air"), ("he", "o2", "air"))):
+    with column:
+        st.markdown("#### " + " → ".join(GAS_LABELS[gas] for gas in order))
+        pressure = start_pressure
+        for gas in order:
+            added_pressure = missing[gas] / cylinder_volume
+            if added_pressure > 0:
+                st.metric(
+                    GAS_LABELS[gas],
+                    f"{pressure:.0f} bar → {pressure + added_pressure:.0f} bar",
+                    delta=f"+ {round(missing[gas])} L",
+                    border=True,
+                )
+            pressure += added_pressure
 
 st.subheader("Cost of the mix")
 gas_number = sum(1 for value in missing.values() if value > 0)

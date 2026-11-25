@@ -73,7 +73,7 @@ with st.container(border=True):
         step=1,
         key="depth",
     )
-    st.markdown("<h3 class='center pb-0'>Partial pressure O2 (PP02)</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 class='center pb-0'>Partial pressure O2 (PPO2)</h3>", unsafe_allow_html=True)
     st.markdown(f"<h2 class='center pt-0'>{compute_ppo2(o2percentage, depth)} bar</h2>", unsafe_allow_html=True)
     st.markdown("<h3 class='center pb-0'>Equivalent air depth (EAD)</h3>", unsafe_allow_html=True)
     st.markdown(f"<h2 class='center pt-0'>{equivalent_air_depth(o2percentage, depth)} m</h2>", unsafe_allow_html=True)

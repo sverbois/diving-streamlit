@@ -105,8 +105,8 @@ def test_category_for_q(q, expected):
         (601, "??/100"),
     ],
 )
-def test_dci_risq_for_q(q, expected):
-    assert utils.dci_risq_for_q(q) == expected
+def test_dcs_risk_for_q(q, expected):
+    assert utils.dcs_risk_for_q(q) == expected
 
 
 def test_dive_plan():

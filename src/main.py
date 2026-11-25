@@ -33,8 +33,7 @@ streamlit_style = """
 """
 st.html(streamlit_style)
 
-# Voir la liste des icon possibles ici : https://fonts.google.com/icons?icon.set=Material+Icons
-
+# Icon names: https://fonts.google.com/icons?icon.set=Material+Icons
 home_page = st.Page(
     "tools/home.py",
     title="Home",

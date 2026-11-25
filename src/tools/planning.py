@@ -15,10 +15,6 @@ from utils import build_dive_profile
 PREFERENCES = st.session_state["preferences"]
 
 COLUMN_CONFIG = {
-    "icon": st.column_config.TextColumn(
-        "",
-        width=30,
-    ),
     "depth": st.column_config.NumberColumn(
         "Depth (m)",
         min_value=10,
@@ -27,7 +23,6 @@ COLUMN_CONFIG = {
         format="%d m",
         required=True,
     ),
-    # Colonne d'affichage (texte) pour masquer la profondeur pendant les phases de montée/descente
     "depth_display": st.column_config.TextColumn(
         "Depth (m)",
     ),
@@ -56,14 +51,6 @@ COLUMN_CONFIG = {
         format="%d bar",
     ),
 }
-ICONS = {
-    "start": "🚀",
-    "constant": "🤿",
-    "ascent": "⬆️",
-    "descent": "⬇️",
-    "deco": "🫧",
-}
-
 
 st.title("Gas planning")
 with st.expander("Description"):
@@ -109,10 +96,8 @@ profile = build_dive_profile(
     stop_duration=SAFETY_STOP_DURATION + decompression_time,
 )
 fulldata = add_gas_consumption(profile, rmv=rmv, cylinder_volume=cylinder_volume, cylinder_pressure=cylinder_pressure)
-fulldata["icon"] = fulldata["type"].map(ICONS)
-# Arrondir les durées à l'entier supérieur pour l'affichage
 fulldata["duration_display"] = fulldata["duration"].apply(math.ceil)
-# Masque la profondeur pour les segments de montée / descente dans l'affichage final
+# A mean depth would read as a level: show the direction instead.
 fulldata["depth_display"] = fulldata.apply(
     lambda r: "⬆️" if r["type"] == "ascent" else "⬇️" if r["type"] == "descent" else f"{round(r['depth'])} m",
     axis=1,
@@ -156,7 +141,6 @@ fig = px.line(
     fulldata,
     x="runtime",
     y="end_depth",
-    # title="Diving profile",
     labels={"runtime": "Runtime (min)", "end_depth": "Depth (m)"},
 )
 fig.update_yaxes(autorange="reversed")

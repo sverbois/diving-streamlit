@@ -3,7 +3,7 @@ import streamlit as st
 
 from utils import category_for_q
 from utils import compute_q
-from utils import dci_risq_for_q
+from utils import dcs_risk_for_q
 
 EXAMPLE_TIME = 25  # min, used to derive an example depth for each category below
 
@@ -88,7 +88,7 @@ table = pd.DataFrame(
             "Time (min)": EXAMPLE_TIME,
             "Depth (m)": round(q / (EXAMPLE_TIME**0.5)),
             "Engagement (Q)": q,
-            "Risk of DCS": dci_risq_for_q(q),
+            "Risk of DCS": dcs_risk_for_q(q),
         }
         for kind, q in CATEGORIES
     ]
@@ -102,7 +102,7 @@ st.dataframe(
 
 st.header("DCS Risk")
 st.info(
-    "When Engagment (Q) is multiplied by 1.3, the DCS risk is multiplied by 10. "
+    "When Engagement (Q) is multiplied by 1.3, the DCS risk is multiplied by 10. "
     "This means that a dive with Q=200 has a DCS risk of 1/100,000, while a dive with Q=260 (200*1.3) has a DCS risk of 1/10,000."
 )
 st.markdown(
