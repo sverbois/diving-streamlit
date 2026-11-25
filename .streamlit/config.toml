@@ -4,3 +4,6 @@ toolbarMode = "auto"
 
 [theme]
 paddingTop = "0rem"
+
+[theme.sidebar]
+paddingTop = "1.5rem"
