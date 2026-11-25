@@ -1,28 +1,9 @@
-import streamlit as st
-
-from db import UserDataModel
-from db import get_user
-
 PPO2_VALUES = (0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
 DEFAULT_PPO2_INDEX = 6
 CYLINDER_VOLUMES = (10, 12, 14, 15, 16, 17, 18, 20, 24)
 DEFAULT_CYLINDER_VOLUME_INDEX = 3
 END_DEPTHS = (24, 30)
 MIN_O2_IN_NORMOXIC_TRIMIX = 0.20
-
-
-def get_user_data():
-    if "user_data" not in st.session_state:
-        if st.user.is_logged_in:  # authenticated user
-            user = get_user(st.user.email)
-            if user:  # existing user
-                user_data = UserDataModel.model_validate(user.data)
-            else:  # new user
-                user_data = UserDataModel(name=st.user.name, email=st.user.email)
-        else:  # anonymous user
-            user_data = UserDataModel()
-        st.session_state["user_data"] = user_data
-    return st.session_state["user_data"]
 
 
 def get_missing_gases_pressures(

@@ -1,8 +1,10 @@
 import streamlit as st
 
-# from db import initialize_db
+from db import UserPreferences
+from db import initialize_db
+from db import record_visit
 
-# initialize_db()
+initialize_db()
 
 st.set_page_config(page_title="Diving Tools", page_icon=":material/scuba_diving:")
 st.logo(
@@ -86,6 +88,9 @@ if st.user.is_logged_in:
     pages["User"] = [preferences_page]
     if st.user.email == "sebastien.verbois@gmail.com":
         pages["User"].append(statistics_page)
+
+if "preferences" not in st.session_state:
+    st.session_state["preferences"] = record_visit(st.user.email) if st.user.is_logged_in else UserPreferences()
 
 pg = st.navigation(pages, position="sidebar")
 

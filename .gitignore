@@ -1,6 +1,5 @@
 .venv
 *.pyc
 secrets.toml
-sqlite.db
 .agents/
 .claude/skills/

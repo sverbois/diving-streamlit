@@ -6,9 +6,8 @@ import streamlit as st
 
 from utils import CYLINDER_VOLUMES
 from utils import DEFAULT_CYLINDER_VOLUME_INDEX
-from utils import get_user_data
 
-USER_DATA = get_user_data()
+PREFERENCES = st.session_state["preferences"]
 
 DECO_DEPTH = 6  # m
 SAFETY_STOP_DURATION = 5  # min
@@ -75,14 +74,14 @@ with st.container(border=True):
         "RMV (L/min)",
         min_value=8,
         max_value=25,
-        value=USER_DATA.rmv,
+        value=PREFERENCES.rmv,
         step=1,
     )
     descent_speed = col1.slider(
         "Descent speed (m/min)",
         min_value=10,
         max_value=30,
-        value=USER_DATA.descent_speed,
+        value=PREFERENCES.descent_speed,
         step=2,
     )
     cylinder_volume = col1.selectbox(

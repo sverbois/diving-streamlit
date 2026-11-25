@@ -1,5 +1,3 @@
-import json
-
 import streamlit as st
 from pydantic import BaseModel
 from sqlalchemy import text
@@ -7,26 +5,26 @@ from sqlalchemy import text
 USER_TABLE_NAME = "diving_users"
 
 
-class UserDataModel(BaseModel):
-    # name: str = Field(default="Anonymous", description="Nom dans l'application")
-    # email: str = Field(
-    #     default="anonymous@domain.com",
-    #     description="Courriel",
-    #     readOnly=True,
-    # )
+class UserPreferences(BaseModel):
     rmv: int = 20
     descent_speed: int = 20
 
 
+def get_connection():
+    return st.connection("db", type="sql")
+
+
+@st.cache_resource
 def initialize_db():
-    conn = st.connection("supabase", type="sql")
-    with conn.session as s:
+    with get_connection().session as s:
         s.execute(
             text(
                 f"""
                 CREATE TABLE IF NOT EXISTS {USER_TABLE_NAME} (
-                    email TEXT PRIMARY KEY,
-                    data  JSON
+                    email       TEXT PRIMARY KEY,
+                    preferences JSONB NOT NULL DEFAULT '{{}}',
+                    first_seen  TIMESTAMPTZ NOT NULL DEFAULT now(),
+                    last_seen   TIMESTAMPTZ NOT NULL DEFAULT now()
                 );
                 """
             )
@@ -34,41 +32,33 @@ def initialize_db():
         s.commit()
 
 
-def get_user(email):
-    conn = st.connection("supabase", type="sql")
-    with conn.session as s:
-        user = s.execute(
-            text(f"SELECT * FROM {USER_TABLE_NAME} WHERE email = :email"),
+def record_visit(email) -> UserPreferences:
+    with get_connection().session as s:
+        preferences = s.execute(
+            text(
+                f"""
+                INSERT INTO {USER_TABLE_NAME} (email) VALUES (:email)
+                ON CONFLICT (email) DO UPDATE SET last_seen = now()
+                RETURNING preferences;
+                """
+            ),
             {"email": email},
-        ).fetchone()
-    return user
+        ).scalar_one()
+        s.commit()
+    return UserPreferences.model_validate(preferences)
+
+
+def save_preferences(email, preferences: UserPreferences):
+    with get_connection().session as s:
+        s.execute(
+            text(f"UPDATE {USER_TABLE_NAME} SET preferences = CAST(:preferences AS JSONB) WHERE email = :email"),
+            {"email": email, "preferences": preferences.model_dump_json()},
+        )
+        s.commit()
 
 
 def get_users():
-    conn = st.connection("supabase", type="sql")
-    with conn.session as s:
-        users = s.execute(
-            text(f"SELECT * FROM {USER_TABLE_NAME}"),
+    with get_connection().session as s:
+        return s.execute(
+            text(f"SELECT email, first_seen, last_seen, preferences FROM {USER_TABLE_NAME} ORDER BY last_seen DESC"),
         ).fetchall()
-    return users
-
-
-def save_user(user_data):
-    if st.user.email:
-        conn = st.connection("supabase", type="sql")
-        with conn.session as s:
-            s.execute(
-                text(
-                    f"""
-                    INSERT INTO {USER_TABLE_NAME} (email, data)
-                    VALUES (:email, :data)
-                    ON CONFLICT (email) DO UPDATE SET data = EXCLUDED.data;
-                    """
-                ),
-                {
-                    "email": st.user.email,
-                    "data": json.dumps(user_data.model_dump()),
-                },
-            )
-            s.commit()
-        st.session_state["user_data"] = user_data

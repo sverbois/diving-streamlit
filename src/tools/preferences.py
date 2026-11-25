@@ -1,10 +1,9 @@
 import streamlit as st
 
-from db import UserDataModel
-from db import save_user
-from utils import get_user_data
+from db import UserPreferences
+from db import save_preferences
 
-USER_DATA = get_user_data()
+PREFERENCES = st.session_state["preferences"]
 
 st.title("Preferences")
 with st.expander("Description"):
@@ -15,11 +14,13 @@ profile1, profile2 = st.tabs(["Diving preferences", "Blender prices"])
 
 with profile1:
     with st.form("user_form"):
-        rmv = st.number_input("RMV in L/min", min_value=1, value=USER_DATA.rmv)
-        descent_speed = st.number_input("Descent speed in m/min", min_value=1, value=USER_DATA.descent_speed)
+        rmv = st.number_input("RMV in L/min", min_value=1, value=PREFERENCES.rmv)
+        descent_speed = st.number_input("Descent speed in m/min", min_value=1, value=PREFERENCES.descent_speed)
         submitted = st.form_submit_button("Save my profile", icon=":material/save:")
     if submitted:
-        save_user(UserDataModel(rmv=rmv, descent_speed=descent_speed))
+        preferences = UserPreferences(rmv=rmv, descent_speed=descent_speed)
+        save_preferences(st.user.email, preferences)
+        st.session_state["preferences"] = preferences
         st.toast("Profile saved successfully!", icon=":material/check_circle:")
 
 with profile2:
