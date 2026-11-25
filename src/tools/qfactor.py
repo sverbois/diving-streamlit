@@ -93,7 +93,7 @@ table = pd.DataFrame(
 st.dataframe(
     table.style.apply(highlight_row, axis=1),
     hide_index=True,
-    width="content",
+    width="stretch",
     height="content",
     alt="Example dives by engagement",
 )
