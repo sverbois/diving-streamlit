@@ -215,4 +215,4 @@ plotly_config = {
     "displaylogo": False,
     "modeBarButtonsToRemove": ["zoom", "zoomin", "zoomout", "autoscale", "resetscale", "pan"],
 }
-st.plotly_chart(fig, use_container_width=True, config=plotly_config)
+st.plotly_chart(fig, width="stretch", config=plotly_config)
