@@ -4,7 +4,8 @@ import streamlit as st
 
 from utils import DEFAULT_PPO2_INDEX
 from utils import END_DEPTHS
-from utils import PPO2_VALUES, MIN_O2_IN_NORMOXIC_TRIMIX
+from utils import MIN_O2_IN_NORMOXIC_TRIMIX
+from utils import PPO2_VALUES
 
 
 def best_trimix(dive_depth, max_end_depth, max_ppo2):

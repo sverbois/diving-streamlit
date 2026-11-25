@@ -197,10 +197,9 @@ with st.container(horizontal=True):
 
 partialdata = fulldata[["depth", "runtime", "type"]]
 for i in range(len(partialdata)):
-    if partialdata.iloc[i]["type"] in ["ascent", "descent"]:
-        # Si ce n'est pas la dernière ligne, utilise la profondeur de la ligne suivante
-        if i + 1 < len(partialdata):
-            partialdata.iloc[i, partialdata.columns.get_loc("depth")] = partialdata.iloc[i + 1]["depth"]
+    # Si ce n'est pas la dernière ligne, utilise la profondeur de la ligne suivante
+    if partialdata.iloc[i]["type"] in ["ascent", "descent"] and i + 1 < len(partialdata):
+        partialdata.iloc[i, partialdata.columns.get_loc("depth")] = partialdata.iloc[i + 1]["depth"]
 
 fig = px.line(
     partialdata,

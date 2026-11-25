@@ -16,3 +16,13 @@ clean:
 # Show streamlit config
 config:
     uv run streamlit config show
+
+# Check lint and format without changing files
+lint:
+    uv run ruff check
+    uv run ruff format --check
+
+# Fix lint and format the code
+format:
+    uv run ruff format
+    uv run ruff check --fix
