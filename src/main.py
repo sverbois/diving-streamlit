@@ -59,6 +59,11 @@ statistics_page = st.Page(
     title="Statistics",
     icon=":material/bar_chart:",
 )
+idealgaslaw_page = st.Page(
+    "tools/idealgaslaw.py",
+    title="Ideal Gas Law",
+    icon=":material/air:",
+)
 qfactor_page = st.Page(
     "tools/qfactor.py",
     title="Dive engagement / Q Factor",
@@ -67,7 +72,7 @@ qfactor_page = st.Page(
 pages = {
     "": [home_page],
     "Tools": [rmv_page, nitrox_page, trimix_page, gas_planning_page, gas_blender_page],
-    "Concepts": [qfactor_page],
+    "Concepts": [idealgaslaw_page, qfactor_page],
 }
 if st.user.is_logged_in:
     pages["User"] = [preferences_page]
