@@ -103,7 +103,7 @@ ANIMATION = """
 </html>
 """
 
-st.title("Ideal Gas Law")
+st.title("Ideal Gas Law (1834)")
 with st.expander("Description"):
     st.markdown(
         "The ideal gas law links the pressure, volume, temperature and amount of a gas. "
@@ -206,3 +206,20 @@ st.iframe(
     height=210,
     alt="Gas particles moving in the cylinder, faster as the temperature rises",
 )
+st.header("For a constant amount of gas")
+st.markdown(
+    "When no gas enters or leaves, $n R$ is constant, so $P V / T$ keeps the same value from one state to another."
+)
+st.latex(r"\Large \frac{P_1 V_1}{T_1} = \frac{P_2 V_2}{T_2}")
+
+st.subheader("Boyle-Mariotte law (1662, 1676)")
+st.markdown("At constant temperature, the volume of a gas is inversely proportional to its pressure.")
+st.latex(r"\Large P_1 V_1 = P_2 V_2")
+
+st.subheader("Charles's law (1787)")
+st.markdown("At constant pressure, the volume of a gas is proportional to its absolute temperature.")
+st.latex(r"\Large \frac{V_1}{T_1} = \frac{V_2}{T_2}")
+
+st.subheader("Gay-Lussac's law (1802)")
+st.markdown("At constant volume, the pressure of a gas is proportional to its absolute temperature.")
+st.latex(r"\Large \frac{P_1}{T_1} = \frac{P_2}{T_2}")
